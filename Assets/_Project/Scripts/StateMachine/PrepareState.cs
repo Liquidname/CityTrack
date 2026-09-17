@@ -15,22 +15,20 @@ namespace _Project.Scripts.StateMachine
         
         public void Enter()
         {
-            throw new System.NotImplementedException();
         }
 
-        public void Tick()
+        public void Tick(float deltaTime)
         {
-            if(EventSystem.current.IsPointerOverGameObject()) return;
+            if(EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
 
             if (Input.GetMouseButtonDown(0))
             {
-                _sfm.Enter<>();
+                _sfm.Enter<RunState>();
             };
         }
 
         public void Exit()
         {
-            throw new System.NotImplementedException();
         }
     }
 }

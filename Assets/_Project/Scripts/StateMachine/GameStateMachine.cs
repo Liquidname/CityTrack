@@ -1,9 +1,11 @@
+using _Project.Scripts.Core;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
 namespace _Project.Scripts.StateMachine
 {
-    public class GameStateMachine : ITickable
+    public class GameStateMachine : IGameTick
     {
         IObjectResolver _resolver;
         private IGameState _current;
@@ -15,14 +17,21 @@ namespace _Project.Scripts.StateMachine
 
         public void Enter<T>() where T : IGameState
         {
-            _current?.Exit();
+            if (_current != null)
+            {
+                Debug.Log("Exit state: " + _current.GetType().Name);
+                _current.Exit();
+            }
+
             _current = _resolver.Resolve<T>();
+            
+            Debug.Log("Enter state: " + _current.GetType().Name);
             _current.Enter();
         }
 
-        public void Tick()
+        public void Tick(float deltaTime)
         {
-            _current.Tick();
+            _current.Tick(deltaTime);
         }
     }
 }

@@ -1,20 +1,28 @@
+using _Project.Scripts.Map;
+
 namespace _Project.Scripts.StateMachine
 {
     public class RunState : IGameState
     {
+        MovementSystem _movementSystem;
+
+        public RunState(MovementSystem movementSystem)
+        {
+            _movementSystem = movementSystem;
+        }
+        
         public void Enter()
         {
-            throw new System.NotImplementedException();
+            _movementSystem.StartMoving();
         }
 
-        public void Tick()
+        public void Tick(float deltaTime)
         {
-            throw new System.NotImplementedException();
         }
 
         public void Exit()
         {
-            throw new System.NotImplementedException();
+            _movementSystem.StopMoving();
         }
     }
 }
