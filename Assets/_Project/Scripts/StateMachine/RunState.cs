@@ -1,4 +1,5 @@
 using _Project.Scripts.Map;
+using _Project.Scripts.Movement;
 
 namespace _Project.Scripts.StateMachine
 {

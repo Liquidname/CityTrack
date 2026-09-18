@@ -1,5 +1,6 @@
 using System;
 using _Project.Scripts.Map;
+using _Project.Scripts.Movement;
 using TMPro;
 using UnityEngine;
 using VContainer;
@@ -23,8 +24,8 @@ namespace _Project.Scripts.Level1
 
         private void Update()
         {
-            _velocityXText.text = "Velocity X: " + _movement._velocityX.ToString();
-            _velocityYText.text = "Velocity Y: " + _movement._velocityY.ToString();
+            _velocityXText.text = "Velocity X: " + _movement.VelocityX.ToString("F1");
+            _velocityYText.text = "Velocity Y: " + _movement.VelocityY.ToString("F1");
         }
     }
 #endif
