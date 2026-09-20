@@ -1,3 +1,4 @@
+using _Project.Scripts.Camera;
 using _Project.Scripts.Map;
 using _Project.Scripts.Movement;
 using _Project.Scripts.ObjectPools;
@@ -16,6 +17,8 @@ namespace _Project.Scripts.Level1
         [SerializeField] private MovementSettings movementSettings = new MovementSettings();
         [SerializeField] private MapContextView  mapContextView;
         [SerializeField] private MapGeneratorView mapGeneratorView;
+        [SerializeField] private CameraView cameraView;
+        [SerializeField] private CameraSettings cameraSettings = new CameraSettings();
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -23,6 +26,7 @@ namespace _Project.Scripts.Level1
             builder.RegisterComponent(mapView);
             builder.RegisterComponent(mapContextView);
             builder.RegisterComponent(mapGeneratorView);
+            builder.RegisterComponent(cameraView);
             
             builder.Register<ChunkPool>(Lifetime.Singleton);
             builder.Register<PlatformPool>(Lifetime.Singleton);
@@ -32,6 +36,9 @@ namespace _Project.Scripts.Level1
             
             builder.Register<MovementSystem>(Lifetime.Singleton)
                 .WithParameter(movementSettings);
+
+            builder.Register<CameraSystem>(Lifetime.Singleton)
+                .WithParameter(cameraSettings);
         
             builder.Register<GameStateMachine>(Lifetime.Singleton);
         

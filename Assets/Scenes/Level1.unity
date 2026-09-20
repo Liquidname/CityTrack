@@ -539,6 +539,7 @@ GameObject:
   - component: {fileID: 330585545}
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
+  - component: {fileID: 330585548}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -664,6 +665,19 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &330585548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96345e24a82164740a789a61a05d7896, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_Project.Scripts.Camera.CameraView
+  targetCamera: {fileID: 330585545}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -1344,11 +1358,19 @@ MonoBehaviour:
     glideAcceleration: 5
     drag: 0.15
     glideLiftCoefficient: 0.35
-    bounceYBoostMultiplier: 2.76
+    bounceYBoostMultiplier: 1.6
     reduceXonObstacleHit: 0.7
     minBounceSpeed: 4
   mapContextView: {fileID: 1718392605}
   mapGeneratorView: {fileID: 266923846}
+  cameraView: {fileID: 330585548}
+  cameraSettings:
+    TopThreshold: 0.75
+    BottomThreshold: 0.5
+    SmoothTimeUp: 0.12
+    SmoothTimeDown: 0.2
+    MinY: -15.23
+    MaxY: 200
 --- !u!4 &1374761668
 Transform:
   m_ObjectHideFlags: 0
