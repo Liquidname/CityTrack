@@ -119,6 +119,37 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &90449068
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 90449069}
+  m_Layer: 0
+  m_Name: ChunkRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &90449069
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90449068}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 744919140}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &179285228
 GameObject:
   m_ObjectHideFlags: 0
@@ -415,6 +446,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Project.Scripts.PlayerView
   direction: {x: 0, y: 1, z: 0}
+  playerModel: {fileID: 1812319414}
 --- !u!54 &246272282
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -442,6 +474,59 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!1 &266923845
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 266923847}
+  - component: {fileID: 266923846}
+  m_Layer: 0
+  m_Name: MapGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &266923846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266923845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d1c6005cfed4a0597bbc1761d75ac9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_Project.Scripts.Map.MapGeneratorView
+  minSpace: 2.5
+  maxSpace: 35.38
+  minHeight: -2.5
+  maxHeight: 2.5
+  chunkParent: {fileID: 786727303}
+  minPlatformsTop: 1
+  maxPlatformsTop: 3
+  minPlatformsBottom: 1
+  maxPlatformsBottom: 3
+--- !u!4 &266923847
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266923845}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.54226, y: 0, z: 151.83711}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -798,6 +883,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Project.Scripts.Level1.DebugPanel
   _velocityYText: {fileID: 887476361}
   _velocityXText: {fileID: 222783377}
+--- !u!1 &591185253
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 591185254}
+  m_Layer: 0
+  m_Name: PlatformRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &591185254
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 591185253}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 744919140}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &744919139
 GameObject:
   m_ObjectHideFlags: 0
@@ -808,7 +924,7 @@ GameObject:
   m_Component:
   - component: {fileID: 744919140}
   m_Layer: 0
-  m_Name: PoolRoot
+  m_Name: PoolRoots
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -826,7 +942,9 @@ Transform:
   m_LocalPosition: {x: 23.8317, y: 0, z: -1.83249}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 90449069}
+  - {fileID: 591185254}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &786727302
@@ -1146,7 +1264,7 @@ Transform:
   m_GameObject: {fileID: 1298871768}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -68.79114, y: -2.67, z: 0}
+  m_LocalPosition: {x: -82.6, y: -2.67, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1210,24 +1328,27 @@ MonoBehaviour:
   mapView: {fileID: 884643031}
   player: {fileID: 246272281}
   movementSettings:
-    horizontalSpeed: 22
-    minHorizontalSpeed: 4
-    maxHorizontalSpeed: 35
-    minVerticalSpeed: -4.5
+    horizontalSpeed: 18.1
+    minHorizontalSpeed: -9.9
+    maxHorizontalSpeed: 50.5
+    minVerticalSpeed: -6.5
     maxVerticalSpeed: 6
-    gravity: 1.09
-    forceDive: 35.2
+    gravity: 3.12
+    forceDive: 10.4
     glideDescentSpeed: 1
     glideBrake: 8
     safeDiveAngle: 15
     diveSpeedLossRate: 3
-    diveBrake: 5
-    diveSpeedLossLimit: 0.3
+    diveBrake: 2.62
+    diveSpeedLossLimit: 0.7
     glideAcceleration: 5
     drag: 0.15
     glideLiftCoefficient: 0.35
     bounceYBoostMultiplier: 2.76
+    reduceXonObstacleHit: 0.7
+    minBounceSpeed: 4
   mapContextView: {fileID: 1718392605}
+  mapGeneratorView: {fileID: 266923846}
 --- !u!4 &1374761668
 Transform:
   m_ObjectHideFlags: 0
@@ -1444,9 +1565,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Project.Scripts.Map.MapContextView
   spawnPosition: {fileID: 179285232}
   chunkPrefabs:
-  - {fileID: 1662282395529458656, guid: 3baae789c7eb42640a693032dfcb9709, type: 3}
-  poolRoot: {fileID: 744919140}
-  chunkParent: {fileID: 786727303}
+  - {fileID: 8855185697191392981, guid: 3baae789c7eb42640a693032dfcb9709, type: 3}
+  poolRoot: {fileID: 90449069}
+  platformPrefabs:
+  - {fileID: 6418379431557377251, guid: fa4a4fa6d0ead6946a2c4248b6d0b2d0, type: 3}
+  platformRoot: {fileID: 591185254}
 --- !u!4 &1718392606
 Transform:
   m_ObjectHideFlags: 0
@@ -1462,59 +1585,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1807314130
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1807314131}
-  - component: {fileID: 1807314132}
-  m_Layer: 0
-  m_Name: SpawnNewSectionTrigger
-  m_TagString: SpawnTrigger
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1807314131
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1807314130}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -23.79114, y: -2.67, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1807314132
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1807314130}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 55.625137, z: 3.2758913}
-  m_Center: {x: 0, y: 16.464142, z: -0.020048618}
 --- !u!1 &1812319414
 GameObject:
   m_ObjectHideFlags: 0
@@ -1668,7 +1738,6 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 1298871769}
-  - {fileID: 1807314131}
   - {fileID: 884643032}
   - {fileID: 246272280}
   - {fileID: 1647199809}
@@ -1678,3 +1747,4 @@ SceneRoots:
   - {fileID: 179285232}
   - {fileID: 744919140}
   - {fileID: 1718392606}
+  - {fileID: 266923847}

@@ -1,25 +1,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace _Project.Scripts.Map
+namespace _Project.Scripts.ObjectPools
 {
-    public class ObjectPool
+    public abstract class ObjectPool<T> where T : Component
     {
-        private readonly ChunkView[] _chunkPrefabs;
+        private readonly T[] _prefabs;
         private readonly Transform _poolRoot;
-        private readonly Queue<ChunkView> _pooledObjects = new Queue<ChunkView>();
-        
-        private Transform _chunkParent;
+        private readonly Queue<T> _pooledObjects = new Queue<T>();
         
         private int initialCapacity = 5;
-        
-        public ObjectPool(MapContextView mapContextView)
+
+        protected ObjectPool(T[] prefabs, Transform poolRoot)
         {
-            _chunkPrefabs = mapContextView.СhunkPrefabs;
-            _poolRoot = mapContextView.PoolRoot;
-            _chunkParent = mapContextView.ChunkParent;
+            _prefabs = prefabs;
+            _poolRoot = poolRoot;
             
-            for (int i = 0; i < _chunkPrefabs.Length; i++)
+            for (int i = 0; i < _prefabs.Length; i++)
             {
                 for (int j = 0; j < initialCapacity; j++)
                 {
@@ -28,16 +25,16 @@ namespace _Project.Scripts.Map
             }
         }
 
-        private ChunkView CreateNewObject()
+        private T CreateNewObject()
         {
-            ChunkView obj = GameObject.Instantiate(_chunkPrefabs[Random.Range(0, _chunkPrefabs.Length)], _poolRoot);
+            T obj = Object.Instantiate(_prefabs[Random.Range(0, _prefabs.Length)], _poolRoot);
             obj.gameObject.SetActive(false);
             return obj;
         }
         
-        public ChunkView Get(Vector3 position)
+        public T Get(Vector3 position, Transform parent)
         {
-            ChunkView obj;
+            T obj;
         
             if (_pooledObjects.Count > 0)
             {
@@ -49,13 +46,15 @@ namespace _Project.Scripts.Map
             }
             
             obj.transform.SetPositionAndRotation(position, Quaternion.identity);
-            obj.transform.SetParent(_chunkParent);
+            
+            obj.transform.SetParent(parent);
+            
             obj.gameObject.SetActive(true);
         
             return obj;
         }
 
-        public void Return(ChunkView obj)
+        public void Return(T obj)
         {
             obj.gameObject.SetActive(false);
             obj.transform.SetParent(_poolRoot);

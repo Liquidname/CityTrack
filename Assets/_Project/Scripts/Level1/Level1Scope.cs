@@ -1,5 +1,7 @@
 using _Project.Scripts.Map;
 using _Project.Scripts.Movement;
+using _Project.Scripts.ObjectPools;
+using _Project.Scripts.Player;
 using _Project.Scripts.StateMachine;
 using UnityEngine;
 using VContainer;
@@ -22,17 +24,20 @@ namespace _Project.Scripts.Level1
             builder.RegisterComponent(mapContextView);
             builder.RegisterComponent(mapGeneratorView);
             
-            builder.Register<ObjectPool>(Lifetime.Singleton);
+            builder.Register<ChunkPool>(Lifetime.Singleton);
+            builder.Register<PlatformPool>(Lifetime.Singleton);
             builder.Register<MapGenerator>(Lifetime.Singleton);
-
+            
+            builder.Register<PlayerSystem>(Lifetime.Singleton);
+            
             builder.Register<MovementSystem>(Lifetime.Singleton)
                 .WithParameter(movementSettings);
         
             builder.Register<GameStateMachine>(Lifetime.Singleton);
         
-            builder.Register<PrepareState>(Lifetime.Transient);
-            builder.Register<RunState>(Lifetime.Transient);
-            builder.Register<DefeatState>(Lifetime.Transient);
+            builder.Register<PrepareState>(Lifetime.Singleton);
+            builder.Register<RunState>(Lifetime.Singleton);
+            builder.Register<DefeatState>(Lifetime.Singleton);
         
             builder.RegisterEntryPoint<Level1EntryPoint>();
         

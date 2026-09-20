@@ -7,6 +7,8 @@ TagManager:
   - Platform
   - DestroyTrigger
   - SpawnTrigger
+  - Window
+  - Obstacle
   layers:
   - Default
   - TransparentFX

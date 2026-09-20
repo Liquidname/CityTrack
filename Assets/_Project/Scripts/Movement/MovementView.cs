@@ -17,11 +17,9 @@ namespace _Project.Scripts.Movement
             if (other.CompareTag("DestroyTrigger"))
             {
                 DestroyTriggered?.Invoke();
-            }
-            else if (other.CompareTag("SpawnTrigger"))
-            {
                 SpawnTriggered?.Invoke();
             }
-    }
+            //else if (other.CompareTag("SpawnTrigger"))
+        }
     }
 }

@@ -1,4 +1,5 @@
-using Unity.VisualScripting;
+using _Project.Scripts.Map;
+using _Project.Scripts.Movement;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -6,15 +7,21 @@ namespace _Project.Scripts.StateMachine
 {
     public class PrepareState : IGameState
     {
-        private GameStateMachine _sfm;
+        private readonly GameStateMachine _sfm;
+        private readonly MapGenerator _mapGenerator;
+        private readonly MovementSystem _movementSystem;
 
-        public PrepareState(GameStateMachine sfm)
+        public PrepareState(GameStateMachine sfm, MapGenerator mapGenerator, MovementSystem movementSystem)
         {
             _sfm = sfm;
+            _mapGenerator = mapGenerator;
+            _movementSystem = movementSystem;
         }
         
         public void Enter()
         {
+            _mapGenerator.ResetMap();
+            _movementSystem.ResetMovement();
         }
 
         public void Tick(float deltaTime)

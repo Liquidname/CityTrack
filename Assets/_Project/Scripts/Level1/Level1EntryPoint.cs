@@ -1,17 +1,19 @@
+using System;
 using _Project.Scripts.Map;
 using _Project.Scripts.Movement;
+using _Project.Scripts.ObjectPools;
 using _Project.Scripts.StateMachine;
 using UnityEngine;
 using VContainer.Unity;
 
 namespace _Project.Scripts.Level1
 {
-    public class Level1EntryPoint : IStartable, ITickable
+    public class Level1EntryPoint : IStartable, ITickable, IDisposable
     {
         private MovementSystem _movementSystem;
         private GameStateMachine _gameStateMachine;
         private MapGenerator _generator;
-        private ObjectPool _objectPool;
+        private ChunkPool _chunkPool;
 
         public Level1EntryPoint(MovementSystem movementSystem, GameStateMachine gameStateMachine, MapGenerator generator)
         {
@@ -22,17 +24,27 @@ namespace _Project.Scripts.Level1
         
         public void Start()
         {
-            _gameStateMachine.Enter<PrepareState>();    
+            _gameStateMachine.Enter<PrepareState>();
+            
+            _movementSystem.Defeated += () => _gameStateMachine.Enter<DefeatState>();
+            
             _movementSystem.Start();
             _generator.Start();
             
         }
-
+        
+        public void Dispose()
+        {
+            
+        }
+        
         public void Tick()
         {
             _movementSystem.Tick(Time.deltaTime);
 			_gameStateMachine.Tick(Time.deltaTime);
             _generator.Tick(Time.deltaTime);
         }
+
+        
     }
 }

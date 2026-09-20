@@ -42,6 +42,9 @@ namespace _Project.Scripts.Movement
         [Header("Bouncing")]
         [Tooltip("Bounce Y Boost multiplier")]
         [SerializeField] private float bounceYBoostMultiplier = 1.4f;
+        [SerializeField] private float reduceXonObstacleHit = 0.7f;
+        [Tooltip("Минимальная скорость X для отскока от платформы, ниже которой засчитывается поражение")]
+        [SerializeField] private float minBounceSpeed = 4f;
         
 
         public float HorizontalSpeed => horizontalSpeed;
@@ -61,5 +64,7 @@ namespace _Project.Scripts.Movement
         public float Drag => drag;
         public float GlideLiftCoefficient => glideLiftCoefficient;
         public float BounceYBoostMultiplier => bounceYBoostMultiplier;
+        public float ReduceXonObstacleHit => reduceXonObstacleHit;
+        public float MinBounceSpeed => minBounceSpeed;
     }
 }
