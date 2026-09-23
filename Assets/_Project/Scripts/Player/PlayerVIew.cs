@@ -1,15 +1,21 @@
 using System;
+using _Project.Scripts.Map;
 using Unity.VisualScripting;
 using UnityEngine;
 
 namespace _Project.Scripts.Player
 {
+    public enum FlightLayer
+    {
+        ROOFS,
+        IN_BUILDING
+    }
     public class PlayerView : MonoBehaviour
     {
         [SerializeField] private Vector3 direction = Vector3.up;
         [SerializeField] private GameObject playerModel;
         
-        public event Action HitThePlatform;
+        public event Action<float> HitThePlatform; //float is platform boost
         public event Action<Vector2> HitTheObstacle;
         
         public Vector3 Direction => direction;
@@ -21,10 +27,9 @@ namespace _Project.Scripts.Player
             if (other.gameObject.CompareTag("Platform"))
             {
                 Debug.Log("Player hit the platform");
-                HitThePlatform?.Invoke();
-            }
-            
-            if (other.gameObject.CompareTag("Obstacle"))
+                HitThePlatform?.Invoke(other.GetComponent<PlatformView>().PlatformBoostMultiplier);
+            } 
+            else if (other.gameObject.CompareTag("Obstacle"))
             {
                 Vector3 diff = transform.position - other.bounds.center;
                 Vector3 extents = other.bounds.extents;
@@ -35,6 +40,12 @@ namespace _Project.Scripts.Player
                 
                 HitTheObstacle?.Invoke(normal);
             }
+            else if (other.gameObject.CompareTag("Window"))
+            {
+                
+            }
+            
+            
         }
 
         

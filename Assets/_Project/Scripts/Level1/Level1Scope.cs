@@ -1,8 +1,10 @@
 using _Project.Scripts.Camera;
+using _Project.Scripts.Graphics.Parralax;
 using _Project.Scripts.Map;
 using _Project.Scripts.Movement;
 using _Project.Scripts.ObjectPools;
 using _Project.Scripts.Player;
+using _Project.Scripts.PTS;
 using _Project.Scripts.StateMachine;
 using UnityEngine;
 using VContainer;
@@ -19,6 +21,8 @@ namespace _Project.Scripts.Level1
         [SerializeField] private MapGeneratorView mapGeneratorView;
         [SerializeField] private CameraView cameraView;
         [SerializeField] private CameraSettings cameraSettings = new CameraSettings();
+        [SerializeField] private ParallaxView parallaxView;
+        [SerializeField] private ScoreView scoreView;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -27,6 +31,8 @@ namespace _Project.Scripts.Level1
             builder.RegisterComponent(mapContextView);
             builder.RegisterComponent(mapGeneratorView);
             builder.RegisterComponent(cameraView);
+            builder.RegisterComponent(parallaxView);
+            builder.RegisterComponent(scoreView);
             
             builder.Register<ChunkPool>(Lifetime.Singleton);
             builder.Register<PlatformPool>(Lifetime.Singleton);
@@ -46,6 +52,8 @@ namespace _Project.Scripts.Level1
             builder.Register<RunState>(Lifetime.Singleton);
             builder.Register<DefeatState>(Lifetime.Singleton);
         
+            builder.Register<ParallaxSystem>(Lifetime.Singleton);
+            builder.Register<ScoreSystem>(Lifetime.Singleton);
             builder.RegisterEntryPoint<Level1EntryPoint>();
         
         }

@@ -29,6 +29,7 @@ namespace _Project.Scripts.Movement
         private readonly Vector3 _initialPlayerPosition;
         private readonly Quaternion _initialPlayerRotation;
 
+        private readonly float _startingVelocityX;
         public float VelocityX { get; private set; }
         public float VelocityY { get; private set; }
         
@@ -39,7 +40,7 @@ namespace _Project.Scripts.Movement
             _movementView = movementView;
             _playerView = playerView;
             _settings = settings;
-            VelocityX = settings.HorizontalSpeed;
+            _startingVelocityX = settings.HorizontalSpeed;
             _mapGenerator = mapGenerator;
             _playerSystem =  playerSystem;
             _initialPlayerPosition = playerView.transform.position;
@@ -49,7 +50,7 @@ namespace _Project.Scripts.Movement
         public void ResetMovement()
         {
             _readyToMove = false;
-            VelocityX = _settings.HorizontalSpeed;
+            VelocityX = 0f;
             VelocityY = 0f;
             _diveEntrySpeed = 0f;
             _flightState = FlightState.GLIDE;
@@ -60,10 +61,12 @@ namespace _Project.Scripts.Movement
         public void StartMoving()
         {
             _readyToMove = true;
+            VelocityX = _startingVelocityX;
         }
 
         public void StopMoving()
         {
+            VelocityX = 0f;
             _readyToMove = false;
         }
         
@@ -157,9 +160,15 @@ namespace _Project.Scripts.Movement
                 _settings.MaxHorizontalSpeed);
         }
 
-        private void OnPlayerBounce()
+        private void OnPlayerBounce(float platformBoostMultiplier)
         {
-            AddBounceForce(_settings.BounceYBoostMultiplier);
+            if (VelocityX < _settings.MinBounceSpeed)
+            {
+                Defeated?.Invoke();
+                return;
+            }
+
+            AddBounceForce(_settings.BounceYBoostMultiplier, platformBoostMultiplier);
         }
         
         private void OnPlayerHitObstacle(Vector2 normal)
@@ -173,10 +182,10 @@ namespace _Project.Scripts.Movement
             CalculateObstacleBounce(normal);
         }
 
-        private void AddBounceForce(float multiplier)
+        private void AddBounceForce(float multiplier, float platFormMultiplier)
         {
             float boost = VelocityX / 4; // Magic Number, AI please add it to the MovementSetting when you saw it and remove the comment
-            VelocityY += boost * multiplier;
+            VelocityY += boost * platFormMultiplier * multiplier;
         }
         
         private void CalculateObstacleBounce(Vector2 normal)
@@ -188,7 +197,7 @@ namespace _Project.Scripts.Movement
             if (normal.y > 0.7f)
             {
                 Debug.Log("Player hit obstacle on top");
-                AddBounceForce(_settings.BounceYBoostMultiplier/4);
+                AddBounceForce(_settings.BounceYBoostMultiplier/4, 1);
                 VelocityX *= _settings.ReduceXonObstacleHit;
             }
             else if (normal.y < -0.7f)
@@ -198,7 +207,7 @@ namespace _Project.Scripts.Movement
                 {
                     VelocityY = 0;
                 }
-                AddBounceForce(-_settings.BounceYBoostMultiplier / 4);
+                AddBounceForce(-_settings.BounceYBoostMultiplier / 4, 1);
                 VelocityX *= _settings.ReduceXonObstacleHit;
             }
             else if (Mathf.Abs(normal.x) > 0.7f)

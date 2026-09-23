@@ -95,8 +95,11 @@ namespace _Project.Scripts.Map
 
         private void ReturnChunk(ChunkView chunk)
         {
-            foreach (Transform platform in chunk.Platforms)
-                _platformPool.Return(platform);
+            for (int i = chunk.Platforms.childCount - 1; i >= 0; i--)
+            {
+                if (chunk.Platforms.GetChild(i).TryGetComponent<PlatformView>(out var platform))
+                    _platformPool.Return(platform);
+            }
             
             _activeChunks.Remove(chunk);
             _chunkPool.Return(chunk);
