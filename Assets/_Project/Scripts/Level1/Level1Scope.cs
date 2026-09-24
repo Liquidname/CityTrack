@@ -55,7 +55,10 @@ namespace _Project.Scripts.Level1
             builder.Register<ParallaxSystem>(Lifetime.Singleton);
             builder.Register<ScoreSystem>(Lifetime.Singleton);
             builder.RegisterEntryPoint<Level1EntryPoint>();
-        
+            
+#if UNITY_EDITOR
+            builder.Register<MovementStatsLogger>(Lifetime.Singleton);
+#endif
         }
     }
 }

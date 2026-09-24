@@ -4,6 +4,7 @@ using _Project.Scripts.Graphics.Parralax;
 using _Project.Scripts.Map;
 using _Project.Scripts.Movement;
 using _Project.Scripts.ObjectPools;
+using _Project.Scripts.Player;
 using _Project.Scripts.PTS;
 using _Project.Scripts.StateMachine;
 using UnityEngine;
@@ -19,9 +20,17 @@ namespace _Project.Scripts.Level1
         private CameraSystem _cameraSystem;
         private ParallaxSystem _parallaxSystem;
         private ScoreSystem _scoreSystem;
+        private PlayerSystem _playerSystem;
+#if UNITY_EDITOR
+        private MovementStatsLogger _statsLogger;
+#endif
 
         public Level1EntryPoint(MovementSystem movementSystem, GameStateMachine gameStateMachine, MapGenerator generator, 
-            CameraSystem cameraSystem, ParallaxSystem parallaxSystem, ScoreSystem scoreSystem)
+            CameraSystem cameraSystem, ParallaxSystem parallaxSystem, ScoreSystem scoreSystem, PlayerSystem playerSystem
+#if UNITY_EDITOR
+            , MovementStatsLogger statsLogger = null
+#endif
+        )
         {
             _movementSystem = movementSystem;
             _gameStateMachine = gameStateMachine;
@@ -29,6 +38,10 @@ namespace _Project.Scripts.Level1
             _cameraSystem = cameraSystem;
             _parallaxSystem = parallaxSystem;
             _scoreSystem = scoreSystem;
+            _playerSystem = playerSystem;
+#if UNITY_EDITOR
+            _statsLogger = statsLogger;
+#endif
         }
         
         public void Start()
@@ -39,12 +52,19 @@ namespace _Project.Scripts.Level1
             
             _movementSystem.Start();
             _generator.Start();
+            _playerSystem.Start();
+#if UNITY_EDITOR
+            _statsLogger?.Start();
+#endif
             _scoreSystem.Start();
+            
         }
         
         public void Dispose()
         {
-            
+#if UNITY_EDITOR
+            _statsLogger?.Dispose();
+#endif
         }
         
         public void Tick()
@@ -55,6 +75,9 @@ namespace _Project.Scripts.Level1
             _cameraSystem.Tick(Time.deltaTime);
             _parallaxSystem.Tick(Time.deltaTime);
             _scoreSystem.Tick(Time.deltaTime);
+#if UNITY_EDITOR
+            _statsLogger?.Tick(Time.deltaTime);
+#endif
         }
     }
 }

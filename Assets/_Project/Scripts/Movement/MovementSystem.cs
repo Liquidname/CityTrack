@@ -22,7 +22,7 @@ namespace _Project.Scripts.Movement
         private readonly PlayerSystem _playerSystem;
 
         private bool _readyToMove;
-        private FlightState _flightState = FlightState.GLIDE;
+        public FlightState FlightState { get; private set; } = FlightState.GLIDE;
 
         private float _diveEntrySpeed;
 
@@ -34,6 +34,8 @@ namespace _Project.Scripts.Movement
         public float VelocityY { get; private set; }
         
         public event Action Defeated;
+        
+        private bool struggleInObstacle;
 
         public MovementSystem(MovementView movementView, PlayerView playerView, MovementSettings settings, MapContextView mapContextView, MapGenerator mapGenerator, PlayerSystem playerSystem)
         {
@@ -53,7 +55,7 @@ namespace _Project.Scripts.Movement
             VelocityX = 0f;
             VelocityY = 0f;
             _diveEntrySpeed = 0f;
-            _flightState = FlightState.GLIDE;
+            FlightState = FlightState.GLIDE;
             _playerView.transform.position = _initialPlayerPosition;
             _playerSystem.SetPlayerModelRotation(_initialPlayerRotation);
         }
@@ -87,7 +89,7 @@ namespace _Project.Scripts.Movement
         {
             if (!_readyToMove) return;
 
-            _flightState = Input.GetMouseButton(0) ? FlightState.DIVE : FlightState.GLIDE;
+            FlightState = Input.GetMouseButton(0) ? FlightState.DIVE : FlightState.GLIDE;
 
             ComputeVerticalVelocity(deltaTime);
             ComputeHorizontalVelocity(deltaTime);
@@ -104,7 +106,12 @@ namespace _Project.Scripts.Movement
             
             // Y - Player move
             _playerView.transform.Translate(_playerView.Direction * (VelocityY * deltaTime));
-            
+
+            if (_playerView.transform.position.y < _settings.InstantLooseY)
+            {
+                Defeated?.Invoke();
+                //Сразу вызывать defeated вместо отдельного метода Loose - это костыль, нужна функция Loose, ИИ сделай если увидишь, удали коммент и сообщи в чате 
+            }
             // Set Player Rotation
             SetPlayerRotation();
         }
@@ -117,7 +124,7 @@ namespace _Project.Scripts.Movement
 
         private void ComputeVerticalVelocity(float deltaTime)
         {
-            if (_flightState == FlightState.DIVE)
+            if (FlightState == FlightState.DIVE)
             {
                 VelocityY = Mathf.Clamp(
                     VelocityY - (_settings.Gravity + _settings.ForceDive) * deltaTime,
@@ -137,7 +144,7 @@ namespace _Project.Scripts.Movement
             float speedChange;
             float minSpeed;
 
-            if (_flightState == FlightState.DIVE)
+            if (FlightState == FlightState.DIVE)
             {
                 _diveEntrySpeed = Mathf.Max(_diveEntrySpeed, VelocityX);
                 minSpeed = Mathf.Max(
@@ -160,7 +167,7 @@ namespace _Project.Scripts.Movement
                 _settings.MaxHorizontalSpeed);
         }
 
-        private void OnPlayerBounce(float platformBoostMultiplier)
+        private void OnPlayerBounce(PlatformView platform)
         {
             if (VelocityX < _settings.MinBounceSpeed)
             {
@@ -168,7 +175,7 @@ namespace _Project.Scripts.Movement
                 return;
             }
 
-            AddBounceForce(_settings.BounceYBoostMultiplier, platformBoostMultiplier);
+            AddBounceForce(_settings.BounceYBoostMultiplier, platform.PlatformBoostMultiplier);
         }
         
         private void OnPlayerHitObstacle(Vector2 normal)

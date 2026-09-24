@@ -5,18 +5,14 @@ using UnityEngine;
 
 namespace _Project.Scripts.Player
 {
-    public enum FlightLayer
-    {
-        ROOFS,
-        IN_BUILDING
-    }
     public class PlayerView : MonoBehaviour
     {
         [SerializeField] private Vector3 direction = Vector3.up;
         [SerializeField] private GameObject playerModel;
         
-        public event Action<float> HitThePlatform; //float is platform boost
+        public event Action<PlatformView> HitThePlatform; //float is platform boost
         public event Action<Vector2> HitTheObstacle;
+        public event Action BreakTheWindow;
         
         public Vector3 Direction => direction;
         public GameObject PlayerModel => playerModel;
@@ -27,7 +23,7 @@ namespace _Project.Scripts.Player
             if (other.gameObject.CompareTag("Platform"))
             {
                 Debug.Log("Player hit the platform");
-                HitThePlatform?.Invoke(other.GetComponent<PlatformView>().PlatformBoostMultiplier);
+                HitThePlatform?.Invoke(other.GetComponent<PlatformView>());
             } 
             else if (other.gameObject.CompareTag("Obstacle"))
             {
@@ -42,12 +38,8 @@ namespace _Project.Scripts.Player
             }
             else if (other.gameObject.CompareTag("Window"))
             {
-                
+                BreakTheWindow?.Invoke();
             }
-            
-            
         }
-
-        
     }
 }

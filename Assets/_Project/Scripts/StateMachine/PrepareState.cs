@@ -1,5 +1,6 @@
 using _Project.Scripts.Map;
 using _Project.Scripts.Movement;
+using _Project.Scripts.Player;
 using _Project.Scripts.PTS;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,13 +13,15 @@ namespace _Project.Scripts.StateMachine
         private readonly MapGenerator _mapGenerator;
         private readonly MovementSystem _movementSystem;
         private readonly ScoreSystem _scoreSystem;
+        private readonly PlayerSystem _playerSystem;
 
-        public PrepareState(GameStateMachine sfm, MapGenerator mapGenerator, MovementSystem movementSystem, ScoreSystem scoreSystem)
+        public PrepareState(GameStateMachine sfm, MapGenerator mapGenerator, MovementSystem movementSystem, ScoreSystem scoreSystem, PlayerSystem playerSystem)
         {
             _sfm = sfm;
             _mapGenerator = mapGenerator;
             _movementSystem = movementSystem;
             _scoreSystem = scoreSystem;
+            _playerSystem = playerSystem;
         }
         
         public void Enter()
@@ -26,6 +29,7 @@ namespace _Project.Scripts.StateMachine
             _mapGenerator.ResetMap();
             _movementSystem.ResetMovement();
             _scoreSystem.ResetScore();
+            _playerSystem.ResetPlayer();
         }
 
         public void Tick(float deltaTime)

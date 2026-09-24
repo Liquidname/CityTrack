@@ -17,11 +17,20 @@ namespace _Project.Scripts.PTS
         
         [SerializeField] private int chainReduceBySlowPlatformHit;
         
+        [Header("Instant PTS")]
+        [SerializeField] private float breakWindowInstantPTS;
+        [SerializeField] private float platformBounceInstantPTS;
+        [SerializeField] private float backToRoofsInstantPTS;
+        
         public float PtsByMetrMultiplier => ptsByMetrMultiplier;
         public float MinimalVelocityXToExtraPTS => minimalVelocityXToExtraPTS;
         public int ChainReduceBySlowPlatformHit => chainReduceBySlowPlatformHit;
         public float RoofsMultiplier => roofsMultiplier;
         public float InBuildingMultiplier => inBuildingMultiplier;
+        public float BreakWindowInstantPTS => breakWindowInstantPTS;
+        public float PlatformBounceInstantPTS => platformBounceInstantPTS;
+
+        public float BackToRoofsInstantPts => backToRoofsInstantPTS;
 
         public void UpdateScoreUI(int score)
         {

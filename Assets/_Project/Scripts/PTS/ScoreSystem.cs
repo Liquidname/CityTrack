@@ -1,8 +1,10 @@
 using System;
 using UnityEngine;
 using _Project.Scripts.Core;
+using _Project.Scripts.Map;
 using _Project.Scripts.Movement;
 using _Project.Scripts.Player;
+using Unity.VisualScripting;
 
 namespace _Project.Scripts.PTS
 {
@@ -16,15 +18,17 @@ namespace _Project.Scripts.PTS
         private MovementSystem _movementSystem;
         private ScoreView _scoreView;
         private PlayerView _playerView;
+        private PlayerSystem _playerSystem;
 
         private int chain = 0;
         private float multiplier;
         
-        public ScoreSystem(MovementSystem movementSystem,  ScoreView scoreView,  PlayerView playerView)
+        public ScoreSystem(MovementSystem movementSystem,  ScoreView scoreView,  PlayerView playerView,  PlayerSystem playerSystem)
         {
             _movementSystem = movementSystem;
             _scoreView = scoreView;
             _playerView = playerView;
+            _playerSystem = playerSystem;
         }
 
 
@@ -32,6 +36,7 @@ namespace _Project.Scripts.PTS
         {
             _playerView.HitThePlatform += OnPlayerHitPlatform;
             _playerView.HitTheObstacle += OnPlayerHitObstacle;
+            _playerView.BreakTheWindow += OnPlayerBreakWindow;
             
             ResetScore();
         }
@@ -64,7 +69,7 @@ namespace _Project.Scripts.PTS
             _scoreView.UpdateScoreUI((int)Score);
         }
 
-        private void OnPlayerHitPlatform(float platformBoost)
+        private void OnPlayerHitPlatform(PlatformView platform)
         {
             if (_movementSystem.VelocityX > _scoreView.MinimalVelocityXToExtraPTS)
             { 
@@ -73,6 +78,11 @@ namespace _Project.Scripts.PTS
             else if(_movementSystem.VelocityX <= _scoreView.MinimalVelocityXToExtraPTS)
             { 
                 PlayerSlowHitPlatform();
+            }
+
+            if (platform.PlatformType == PlatformType.BUILDING_SAVER)
+            {
+                OnPlayerSaveFromLowLayer();
             }
         }
 
@@ -92,6 +102,7 @@ namespace _Project.Scripts.PTS
 
         private void PlayerFastHitPlatform()
         {
+            AddScore(_scoreView.PlatformBounceInstantPTS);
             chain++;
             _scoreView.UpdateChainUI(chain);
         }
@@ -100,6 +111,26 @@ namespace _Project.Scripts.PTS
         {
             chain = Mathf.Max(0, chain-_scoreView.ChainReduceBySlowPlatformHit);
             _scoreView.UpdateChainUI(chain);
+        }
+
+        private void OnPlayerBreakWindow()
+        {
+            AddScore(_scoreView.BreakWindowInstantPTS);
+            
+            if (_playerSystem.FlightLevel == FlightLevel.BUILDING)
+            {
+                multiplier = _scoreView.InBuildingMultiplier;
+            } else if (_playerSystem.FlightLevel == FlightLevel.ROOFS)
+            {
+                multiplier = _scoreView.RoofsMultiplier;
+            }
+            
+            _scoreView.UpdateMultiplierUI(multiplier);
+        }
+
+        private void OnPlayerSaveFromLowLayer()
+        {
+            AddScore(_scoreView.BackToRoofsInstantPts);
         }
     }
 }

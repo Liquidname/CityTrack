@@ -10,7 +10,7 @@ Assets/_Project/Scripts/
 ├── DI/             — RootScope (глобальный VContainer скоуп)
 ├── Level1/         — Level1Scope, Level1EntryPoint, DebugPanel
 ├── Map/            — генерация карты: MapGenerator, ChunkView, MapContextView, MapGeneratorView, пулы
-├── Movement/       — MovementSystem, MovementSettings, MovementView
+├── Movement/       — MovementSystem, MovementSettings, MovementView, MovementStatsLogger
 ├── ObjectPools/    — ChunkPool, PlatformPool
 ├── Player/         — PlayerView (PlayerVIew.cs), PlayerSystem
 ├── StateMachine/   — GameStateMachine, IGameState, состояния (PrepareState, RunState, DefeatState)
@@ -25,19 +25,23 @@ Assets/_Project/Scripts/
 ### Level1Scope (`Scripts/Level1/Level1Scope.cs`)
 Дочерний скоуп уровня. Регистрации:
 
-- **Компоненты сцены** (RegisterComponent): `PlayerView`, `MovementView`, `MapContextView`, `MapGeneratorView`
-- **Singleton-сервисы**: `MovementSystem` (с `WithParameter(movementSettings)`), `GameStateMachine`, `PlayerSystem`, `MapGenerator`, `ChunkPool`, `PlatformPool`
-- **Состояния** (Transient): `PrepareState`, `RunState`, `DefeatState`
-- **Точка входа**: `Level1EntryPoint` (`IStartable`, `ITickable`)
+- **Компоненты сцены** (RegisterComponent): `PlayerView`, `MovementView`, `MapContextView`, `MapGeneratorView`, `CameraView`, `ParallaxView`, `ScoreView`
+- **Singleton-сервисы**: `MovementSystem` (с `WithParameter(movementSettings)`), `CameraSystem` (с `WithParameter(cameraSettings)`), `GameStateMachine`, `PlayerSystem`, `MapGenerator`, `ChunkPool`, `PlatformPool`, `ParallaxSystem`, `ScoreSystem`, `MovementStatsLogger` (под `#if UNITY_EDITOR`)
+- **Состояния** (Singleton): `PrepareState`, `RunState`, `DefeatState`
+- **Точка входа**: `Level1EntryPoint` (`IStartable`, `ITickable`, `IDisposable`)
 
 ## Игровой цикл (Tick)
 
 Единственная точка обновления сцены — `Level1EntryPoint.Tick()`:
 
 ```
-1. MovementSystem.Tick(dt)    — расчёт скоростей, перемещение чанков и игрока, вращение модели
-2. GameStateMachine.Tick(dt)  — делегирует текущему IGameState.Tick(dt)
-3. MapGenerator.Tick(dt)      — генерация карты (пока пустой)
+1. MovementSystem.Tick(dt)      — расчёт скоростей, перемещение чанков и игрока, вращение модели
+2. GameStateMachine.Tick(dt)    — делегирует текущему IGameState.Tick(dt)
+3. MapGenerator.Tick(dt)        — генерация карты (пока пустой)
+4. CameraSystem.Tick(dt)        — следование камеры за игроком
+5. ParallaxSystem.Tick(dt)      — смещение слоёв параллакса
+6. ScoreSystem.Tick(dt)         — подсчёт и отображение очков
+7. MovementStatsLogger.Tick(dt) — сбор телеметрии полёта (под #if UNITY_EDITOR)
 ```
 
 Независимых `Update()` в MonoBehaviour нет (кроме `DebugPanel` под `#if UNITY_EDITOR`).
@@ -117,3 +121,14 @@ Assets/_Project/Scripts/
 - `MapGenerator.Tick()` на данный момент пустой.
 - `Game.Tick()` на RootScope-уровне пустой.
 - В `AddBounceForce` есть magic number (`VelocityX / 4`), отмеченный комментарием для выноса в настройки.
+
+## Отладка и сбор телеметрии
+
+- **`MovementStatsLogger`** (`Movement/MovementStatsLogger.cs`):
+  - Работает только в редакторе под `#if UNITY_EDITOR`.
+  - Реализует `IGameTick`, `IGameStart`, `IDisposable`.
+  - Регистрируется в `Level1Scope` и вызывается в `Level1EntryPoint.Tick(dt)`.
+  - Логирует тайминги, телеметрию скоростей X/Y с интервалом 0.5 с, столкновения с платформами (с силой отскока) и препятствиями.
+  - При `Defeated` или уничтожении скоупа выводит в консоль сводный отчёт забега (`RUN STATISTICS`).
+- **`DebugPanel`** (`Level1/DebugPanel.cs`):
+  - MonoBehaviour компонент (под `#if UNITY_EDITOR`) для оперативного отображения параметров на экране.
