@@ -103,23 +103,63 @@ namespace _Project.Scripts.Movement
             {
                 i.transform.Translate(_movementView.Direction * (VelocityX * deltaTime));
             }
-            
+            Physics.SyncTransforms();
+
             // Y - Player move
-            _playerView.transform.Translate(_playerView.Direction * (VelocityY * deltaTime));
+            float deltaY = VelocityY * deltaTime;
+
+            // Защита от проваливания сквозь Obstacle при падении вниз:
+            if (deltaY < 0f && CheckObstacleRoof(Mathf.Abs(deltaY), out float roofContactY))
+            {
+                _playerView.transform.position = new Vector3(_playerView.transform.position.x, roofContactY, _playerView.transform.position.z);
+            }
+            else
+            {
+                _playerView.transform.Translate(_playerView.Direction * deltaY);
+            }
 
             if (_playerView.transform.position.y < _settings.InstantLooseY)
             {
-                Defeated?.Invoke();
-                //Сразу вызывать defeated вместо отдельного метода Loose - это костыль, нужна функция Loose, ИИ сделай если увидишь, удали коммент и сообщи в чате 
+                Loose();
             }
+
             // Set Player Rotation
             SetPlayerRotation();
+        }
+
+        private bool CheckObstacleRoof(float distance, out float roofContactY)
+        {
+            roofContactY = 0f;
+            Vector3 origin = _playerView.transform.position;
+            float radius = 0.5f;
+
+            RaycastHit[] hits = Physics.SphereCastAll(origin, radius * 0.8f, Vector3.down, distance + 0.1f, ~0, QueryTriggerInteraction.Collide);
+            foreach (var hit in hits)
+            {
+                if (hit.collider.transform.root == _playerView.transform.root) continue;
+
+                // Проверяем крышу препятствия ТОЛЬКО если игрок находится выше её поверхности (падает сверху)
+                if (hit.collider.CompareTag("Obstacle") && hit.normal.y > 0.5f)
+                {
+                    if (origin.y >= hit.collider.bounds.max.y - 0.2f)
+                    {
+                        roofContactY = hit.point.y + radius;
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private void Loose()
+        {
+            Defeated?.Invoke();
         }
 
         private void SetPlayerRotation()
         {
             float angle = Mathf.Atan2(VelocityY, VelocityX) * Mathf.Rad2Deg;
-            _playerSystem.SetPlayerModelRotation(Quaternion.Euler(0, 0, angle-90*-1));
+            _playerSystem.SetPlayerModelRotation(Quaternion.Euler(0, 0, angle - 90 * -1));
         }
 
         private void ComputeVerticalVelocity(float deltaTime)
@@ -161,6 +201,14 @@ namespace _Project.Scripts.Movement
                 speedChange = _settings.GlideAcceleration - VelocityX * _settings.Drag + lift;
             }
 
+            // Если игрок отскочил от стены и летит назад (VelocityX < 0):
+            // Позволяем ему двигаться назад и плавно восстанавливать скорость вперед
+            if (VelocityX < 0f)
+            {
+                VelocityX += speedChange * deltaTime;
+                return;
+            }
+
             VelocityX = Mathf.Clamp(
                 VelocityX + speedChange * deltaTime,
                 minSpeed,
@@ -171,7 +219,7 @@ namespace _Project.Scripts.Movement
         {
             if (VelocityX < _settings.MinBounceSpeed)
             {
-                Defeated?.Invoke();
+                Loose();
                 return;
             }
 
@@ -182,7 +230,7 @@ namespace _Project.Scripts.Movement
         {
             if (VelocityX < _settings.MinBounceSpeed)
             {
-                Defeated?.Invoke();
+                Loose();
                 return;
             }
             
@@ -191,35 +239,61 @@ namespace _Project.Scripts.Movement
 
         private void AddBounceForce(float multiplier, float platFormMultiplier)
         {
-            float boost = VelocityX / 4; // Magic Number, AI please add it to the MovementSetting when you saw it and remove the comment
-            VelocityY += boost * platFormMultiplier * multiplier;
+            float boost = VelocityX / _settings.BounceVelocityXDivider;
+            float bounceImpulse = boost * platFormMultiplier * multiplier;
+
+            if (VelocityY < 0f)
+            {
+                VelocityY = -VelocityY * 0.5f + bounceImpulse;
+            }
+            else
+            {
+                VelocityY += bounceImpulse;
+            }
+
+            VelocityY = Mathf.Clamp(VelocityY, _settings.MinVerticalSpeed, _settings.MaxVerticalSpeed);
         }
         
         private void CalculateObstacleBounce(Vector2 normal)
         {
-            // normal.y = 1, удар сверху вниз, направлен вверх
-            // normal.x = 1, удар слева направо, направлен влево
-            // normal.x = -1 там понятно
-            // 45 слева направа - -0.707, 0.707
             if (normal.y > 0.7f)
             {
                 Debug.Log("Player hit obstacle on top");
-                AddBounceForce(_settings.BounceYBoostMultiplier/4, 1);
+                // Оригинальный слабый толчок от крыши (без лишней подъемной силы):
+                float boost = VelocityX / _settings.BounceVelocityXDivider;
+                float roofBounce = boost * (_settings.BounceYBoostMultiplier / 4f);
+                VelocityY = roofBounce;
                 VelocityX *= _settings.ReduceXonObstacleHit;
+                _diveEntrySpeed = VelocityX;
+
+                if (VelocityX < _settings.MinBounceSpeed)
+                {
+                    Loose();
+                }
             }
             else if (normal.y < -0.7f)
             {
                 Debug.Log("Player hit obstacle ceiling");
-                if (VelocityY > 0)
+                if (VelocityY > 0f)
                 {
-                    VelocityY = 0;
+                    VelocityY = 0f;
                 }
-                AddBounceForce(-_settings.BounceYBoostMultiplier / 4, 1);
+                float boost = VelocityX / _settings.BounceVelocityXDivider;
+                VelocityY -= boost * (_settings.BounceYBoostMultiplier / 4f);
                 VelocityX *= _settings.ReduceXonObstacleHit;
+                _diveEntrySpeed = VelocityX;
+
+                if (VelocityX < _settings.MinBounceSpeed)
+                {
+                    Loose();
+                }
             }
             else if (Mathf.Abs(normal.x) > 0.7f)
             {
-                VelocityX *= _settings.ReduceXonObstacleHit * -1;
+                Debug.Log("Player hit obstacle wall");
+                // Разворачиваем игрока и отталкиваем назад:
+                VelocityX *= _settings.ReduceXonObstacleHit * -1f;
+                _diveEntrySpeed = 0f;
             }
         }
     }

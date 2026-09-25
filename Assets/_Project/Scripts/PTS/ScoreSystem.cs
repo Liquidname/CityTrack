@@ -117,10 +117,10 @@ namespace _Project.Scripts.PTS
         {
             AddScore(_scoreView.BreakWindowInstantPTS);
             
-            if (_playerSystem.FlightLevel == FlightLevel.BUILDING)
+            if (_playerSystem.FlightLevel == MapLayer.BUILDING)
             {
                 multiplier = _scoreView.InBuildingMultiplier;
-            } else if (_playerSystem.FlightLevel == FlightLevel.ROOFS)
+            } else if (_playerSystem.FlightLevel == MapLayer.ROOFS)
             {
                 multiplier = _scoreView.RoofsMultiplier;
             }

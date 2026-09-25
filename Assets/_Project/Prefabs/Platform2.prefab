@@ -125,4 +125,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57bc84368e4248348b15de3ef8a8b620, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Project.Scripts.Map.PlatformView
-  platformBoostMultiplier: 2.4
+  _platformType: 0
+  platformBoostMultiplier: 25.42
+  _spawnLayer: 0

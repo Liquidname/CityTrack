@@ -4,6 +4,7 @@ using System.Runtime.ExceptionServices;
 using _Project.Scripts.Core;
 using _Project.Scripts.Movement;
 using _Project.Scripts.ObjectPools;
+using _Project.Scripts.Player;
 using Unity.AppUI.Core;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -82,12 +83,12 @@ namespace _Project.Scripts.Map
 
             for (int i = 0; i < topPlatforms; i++)
             {
-                SpawnPlatform(obj, 0);
+                SpawnPlatform(obj, MapLayer.ROOFS);
             }
 
             for (int i = 0; i < bottomPlatform; i++)
             {
-                SpawnPlatform(obj, 1);
+                SpawnPlatform(obj, MapLayer.BUILDING);
             }
 
             _activeChunks.Add(obj);
@@ -121,16 +122,27 @@ namespace _Project.Scripts.Map
             return newChunkPos;
         }
 
-        private void SpawnPlatform(ChunkView obj, int stageIndex)
+        private void SpawnPlatform(ChunkView obj, MapLayer layer)
         {
             Vector3 platformPosition = obj.transform.position;
             
             platformPosition.x += Random.Range(0, obj.Length);
             
-            var platform = _platformPool.Get(platformPosition, obj.Platforms);
+            var platform = _platformPool.Get(layer, platformPosition, obj.Platforms);
             
-            // HARDCODE AI PLEASE MENTION WHEN SEE IT
-            platform.transform.localPosition += Vector3.up*obj.FloorYHeight[stageIndex];
+            float height = 0;
+
+            switch (layer)
+            {
+                case MapLayer.BUILDING:
+                    height = obj.BuildingFloorYHeight;
+                    break;
+                case MapLayer.ROOFS:
+                    height = obj.RoofsFloorYHeight;
+                    break;
+            }
+            
+            platform.transform.localPosition += Vector3.up*height;
         }
     }
 }

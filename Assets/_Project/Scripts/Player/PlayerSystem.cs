@@ -7,9 +7,9 @@ namespace _Project.Scripts.Player
     {
         private PlayerView _playerView;
         
-        private FlightLevel _flightLevel;
+        private MapLayer _flightLevel;
         
-        public FlightLevel FlightLevel => _flightLevel;
+        public MapLayer FlightLevel => _flightLevel;
         
         public PlayerSystem(PlayerView playerView)
         {
@@ -31,18 +31,18 @@ namespace _Project.Scripts.Player
 
         private void OnPlayerBreakTheWindow()
         {
-            if (_flightLevel == FlightLevel.ROOFS)
+            if (_flightLevel == MapLayer.ROOFS)
             {
-                _flightLevel = FlightLevel.BUILDING;
-            } else if (_flightLevel == FlightLevel.BUILDING)
+                _flightLevel = MapLayer.BUILDING;
+            } else if (_flightLevel == MapLayer.BUILDING)
             {
-                _flightLevel = FlightLevel.ROOFS;
+                _flightLevel = MapLayer.ROOFS;
             }
         }
 
         public void ResetPlayer()
         {
-            _flightLevel = FlightLevel.ROOFS;
+            _flightLevel = MapLayer.ROOFS;
         }
     }
 }

@@ -45,6 +45,10 @@ namespace _Project.Scripts.Movement
         [SerializeField] private float reduceXonObstacleHit = 0.7f;
         [Tooltip("Минимальная скорость X для отскока от платформы, ниже которой засчитывается поражение")]
         [SerializeField] private float minBounceSpeed = 4f;
+        [Tooltip("Делитель скорости X для расчета базовой силы отскока")]
+        [SerializeField] private float bounceVelocityXDivisor = 4f;
+        [Tooltip("Минимальная сила вертикального отскока от крыши препятствия")]
+        [SerializeField] private float minRoofBounceForce = 4f;
 
         [Header("Constants")] [SerializeField] private float instantLooseY;
         
@@ -68,6 +72,8 @@ namespace _Project.Scripts.Movement
         public float BounceYBoostMultiplier => bounceYBoostMultiplier;
         public float ReduceXonObstacleHit => reduceXonObstacleHit;
         public float MinBounceSpeed => minBounceSpeed;
+        public float BounceVelocityXDivider => bounceVelocityXDivisor > 0f ? bounceVelocityXDivisor : 4f;
+        public float MinRoofBounceForce => minRoofBounceForce > 0f ? minRoofBounceForce : 4f;
         public float InstantLooseY => instantLooseY;
     }
 }

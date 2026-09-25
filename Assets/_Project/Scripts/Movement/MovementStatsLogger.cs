@@ -80,7 +80,7 @@ namespace _Project.Scripts.Movement
             float velY = _movementSystem.VelocityY;
             float height = _playerView.transform.position.y;
             FlightState state = _movementSystem.FlightState;
-            FlightLevel level = _playerSystem.FlightLevel;
+            MapLayer level = _playerSystem.FlightLevel;
             float score = _scoreSystem.Score;
 
             // Velocity extremes

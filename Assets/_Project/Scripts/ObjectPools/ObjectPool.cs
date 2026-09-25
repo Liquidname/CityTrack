@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace _Project.Scripts.ObjectPools
 {
-    public abstract class ObjectPool<T> where T : Component
+    public class ObjectPool<T> where T : Component
     {
         private readonly T[] _prefabs;
         private readonly Transform _poolRoot;
@@ -11,7 +11,7 @@ namespace _Project.Scripts.ObjectPools
         
         private int initialCapacity = 5;
 
-        protected ObjectPool(T[] prefabs, Transform poolRoot)
+        public ObjectPool(T[] prefabs, Transform poolRoot)
         {
             _prefabs = prefabs;
             _poolRoot = poolRoot;

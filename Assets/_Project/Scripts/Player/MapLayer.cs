@@ -1,6 +1,6 @@
 namespace _Project.Scripts.Player
 {
-    public enum FlightLevel
+    public enum MapLayer
     {
         SKY,
         ROOFS,
