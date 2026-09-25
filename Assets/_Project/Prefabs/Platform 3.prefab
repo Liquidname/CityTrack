@@ -228,7 +228,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Project.Scripts.Map.PlatformView
   _platformType: 0
-  platformBoostMultiplier: 20.11
+  platformBoostMultiplier: 1
   _spawnLayer: 1
 --- !u!65 &5873042237708592252
 BoxCollider:

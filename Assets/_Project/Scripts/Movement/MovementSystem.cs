@@ -240,18 +240,7 @@ namespace _Project.Scripts.Movement
         private void AddBounceForce(float multiplier, float platFormMultiplier)
         {
             float boost = VelocityX / _settings.BounceVelocityXDivider;
-            float bounceImpulse = boost * platFormMultiplier * multiplier;
-
-            if (VelocityY < 0f)
-            {
-                VelocityY = -VelocityY * 0.5f + bounceImpulse;
-            }
-            else
-            {
-                VelocityY += bounceImpulse;
-            }
-
-            VelocityY = Mathf.Clamp(VelocityY, _settings.MinVerticalSpeed, _settings.MaxVerticalSpeed);
+            VelocityY += boost * platFormMultiplier * multiplier;
         }
         
         private void CalculateObstacleBounce(Vector2 normal)

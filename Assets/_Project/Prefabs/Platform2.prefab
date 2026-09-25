@@ -126,5 +126,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Project.Scripts.Map.PlatformView
   _platformType: 0
-  platformBoostMultiplier: 25.42
+  platformBoostMultiplier: 2.4
   _spawnLayer: 0

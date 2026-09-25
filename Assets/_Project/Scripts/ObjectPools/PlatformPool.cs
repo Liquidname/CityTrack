@@ -10,8 +10,8 @@ namespace _Project.Scripts.ObjectPools
         private readonly ObjectPool<PlatformView> _buildingsPool;
         public PlatformPool(MapContextView context)
         {
-            _roofsPool = new ObjectPool<PlatformView>(context.PlatformPrefabs, context.PlatformRoot);
-            _buildingsPool = new ObjectPool<PlatformView>(context.PlatformPrefabs, context.PlatformRoot);
+            _roofsPool = new ObjectPool<PlatformView>(context.PlatformPrefabs, context.PlatformRoofsRoot);
+            _buildingsPool = new ObjectPool<PlatformView>(context.PlatformPrefabs, context.PlatformBuildingRoot);
         }
 
         public PlatformView Get(MapLayer layer, Vector3 position, Transform parent)

@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Project.Scripts.Map.ChunkView
   length: 55
   skyFloorYHeight: 11
-  roofsFloorYHeight: 1.25
+  roofsFloorYHeight: 1.4
   buildingFloorYHeight: -11.57
   platforms: {fileID: 534285787211516261}
 --- !u!1 &2696784508734981332

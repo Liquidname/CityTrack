@@ -51,7 +51,7 @@ MonoBehaviour:
   length: 55
   skyFloorYHeight: 11
   roofsFloorYHeight: 1.25
-  buildingFloorYHeight: -11.57
+  buildingFloorYHeight: -7.85
   platforms: {fileID: 534285787211516261}
 --- !u!1 &2696784508734981332
 GameObject:
