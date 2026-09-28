@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6929609768735785749}
   - component: {fileID: -9083629465984541019}
   m_Layer: 0
-  m_Name: Platform1
+  m_Name: Platform2
   m_TagString: Platform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3.1570346, y: 0.39618802, z: 1.9394966}
+  m_LocalScale: {x: 2.5580683, y: 0.6108, z: 2.3145733}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -68,7 +68,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: aa60dc0f504f8eb41974f50e1528f594, type: 2}
+  - {fileID: 2100000, guid: 6af20d21fdb3e9846be9fcc5368045e6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -125,5 +125,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57bc84368e4248348b15de3ef8a8b620, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Project.Scripts.Map.PlatformView
-  _platformType: 0
-  platformBoostMultiplier: 1
+  _config: {fileID: 11400000, guid: 474dc08024238ac4ca2c95b297ae064b, type: 2}

@@ -15,12 +15,21 @@ MonoBehaviour:
   definitons:
   - id: 0
     DisplayName: Max Speed Bonus
+    platformConfig: {fileID: 0}
     MaxLevel: 9
     BaseCost: 15
     CostGrowthRate: 1.6
     ValuePerLevel: 2
   - id: 1
-    DisplayName: Max Speed Bonus
+    DisplayName: Armor
+    platformConfig: {fileID: 0}
+    MaxLevel: 9
+    BaseCost: 5
+    CostGrowthRate: 1.6
+    ValuePerLevel: 0
+  - id: 2
+    DisplayName: Brick Bounce
+    platformConfig: {fileID: 0}
     MaxLevel: 9
     BaseCost: 5
     CostGrowthRate: 1.6

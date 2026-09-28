@@ -85,7 +85,7 @@ namespace _Project.Scripts.PTS
                 PlayerSlowHitPlatform();
             }
 
-            if (platform.PlatformType == PlatformType.BUILDING_SAVER)
+            if (platform.Config.isBuildingSaver)
             {
                 OnPlayerSaveFromLowLayer();
             }

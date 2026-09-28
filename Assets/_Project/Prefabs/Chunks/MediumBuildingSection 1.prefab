@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74b3e951744e4515b950918c5e2b161b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Project.Scripts.Map.ChunkView
-  length: 55
+  length: 35
   skyFloorYHeight: 11
   roofsFloorYHeight: 1.46
   buildingFloorYHeight: -10.81

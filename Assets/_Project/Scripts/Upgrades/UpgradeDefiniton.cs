@@ -1,4 +1,5 @@
 using System;
+using _Project.Scripts.Map;
 using UnityEngine;
 
 namespace _Project.Scripts.Upgrades
@@ -8,6 +9,8 @@ namespace _Project.Scripts.Upgrades
     {
         public UpgradeID id;
         public string DisplayName;
+        [Header("Leave empty for non-platforms upgrades")]
+        public PlatformConfig platformConfig;
         public int MaxLevel;
         public float BaseCost;
         public float CostGrowthRate;
