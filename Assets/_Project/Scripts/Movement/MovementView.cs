@@ -13,7 +13,6 @@ namespace _Project.Scripts.Movement
 
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log("Movement view triggered");
             if (other.CompareTag("DestroyTrigger"))
             {
                 DestroyTriggered?.Invoke();

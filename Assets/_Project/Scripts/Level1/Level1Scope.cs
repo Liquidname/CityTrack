@@ -1,11 +1,13 @@
 using _Project.Scripts.Camera;
 using _Project.Scripts.Graphics.Parralax;
 using _Project.Scripts.Map;
+using _Project.Scripts.Money;
 using _Project.Scripts.Movement;
 using _Project.Scripts.ObjectPools;
 using _Project.Scripts.Player;
 using _Project.Scripts.PTS;
 using _Project.Scripts.StateMachine;
+using _Project.Scripts.Upgrades;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -17,12 +19,15 @@ namespace _Project.Scripts.Level1
         [SerializeField] private MovementView mapView;
         [SerializeField] private PlayerView player;
         [SerializeField] private MovementSettings movementSettings = new MovementSettings();
+        [SerializeField] private UpgradeConfig upgradeConfig;
         [SerializeField] private MapContextView  mapContextView;
         [SerializeField] private MapGeneratorView mapGeneratorView;
         [SerializeField] private CameraView cameraView;
         [SerializeField] private CameraSettings cameraSettings = new CameraSettings();
         [SerializeField] private ParallaxView parallaxView;
         [SerializeField] private ScoreView scoreView;
+        [SerializeField] private MoneyView moneyView;
+        [SerializeField] private UpgradeView upgradeView;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -33,11 +38,15 @@ namespace _Project.Scripts.Level1
             builder.RegisterComponent(cameraView);
             builder.RegisterComponent(parallaxView);
             builder.RegisterComponent(scoreView);
+            builder.RegisterComponent(moneyView);
+            builder.RegisterComponent(upgradeView);
             
             builder.Register<ChunkPool>(Lifetime.Singleton);
             builder.Register<PlatformPool>(Lifetime.Singleton);
             builder.Register<MapGenerator>(Lifetime.Singleton);
             
+            builder.Register<UpgradeSystem>(Lifetime.Singleton)
+                .WithParameter(upgradeConfig);
             builder.Register<PlayerSystem>(Lifetime.Singleton);
             
             builder.Register<MovementSystem>(Lifetime.Singleton)
@@ -53,7 +62,12 @@ namespace _Project.Scripts.Level1
             builder.Register<DefeatState>(Lifetime.Singleton);
         
             builder.Register<ParallaxSystem>(Lifetime.Singleton);
+            builder.Register<MoneySystem>(Lifetime.Singleton);
+            
             builder.Register<ScoreSystem>(Lifetime.Singleton);
+            
+            builder.Register<MovementStats>(Lifetime.Singleton);
+            
             builder.RegisterEntryPoint<Level1EntryPoint>();
             
 #if UNITY_EDITOR

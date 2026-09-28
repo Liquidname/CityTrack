@@ -10,34 +10,36 @@ namespace _Project.Scripts.ObjectPools
         private readonly ObjectPool<PlatformView> _buildingsPool;
         public PlatformPool(MapContextView context)
         {
-            _roofsPool = new ObjectPool<PlatformView>(context.PlatformPrefabs, context.PlatformRoofsRoot);
-            _buildingsPool = new ObjectPool<PlatformView>(context.PlatformPrefabs, context.PlatformBuildingRoot);
+            _roofsPool = new ObjectPool<PlatformView>(context.PlatformRoofsPrefabs, context.PlatformRoofsRoot);
+            _buildingsPool = new ObjectPool<PlatformView>(context.PlatformBuildingPrefabs, context.PlatformBuildingRoot);
         }
 
         public PlatformView Get(MapLayer layer, Vector3 position, Transform parent)
         {
-            if (layer == MapLayer.ROOFS)
+            PlatformView platform = layer switch
             {
-                return _roofsPool.Get(position, parent);
-            } 
+                MapLayer.BUILDING => _buildingsPool.Get(position, parent),
+                MapLayer.ROOFS => _roofsPool.Get(position, parent),
+                _ => null
+            };
             
-            if (layer == MapLayer.BUILDING)
-            {
-                return _buildingsPool.Get(position, parent);
-            }
-            
-            return null;
+            platform?.SetLayer(layer);
+            return platform;
         }
 
         public void Return(PlatformView platformView)
         {
-            if (platformView.SpawnLayer == MapLayer.ROOFS)
+            switch (platformView.CurrentLayer)
             {
-                _roofsPool.Return(platformView);
-            }
-            else if(platformView.SpawnLayer == MapLayer.BUILDING)
-            {
-                _buildingsPool.Return(platformView);
+                case MapLayer.BUILDING:
+                    _buildingsPool.Return(platformView);
+                    break;
+                case MapLayer.ROOFS:
+                    _roofsPool.Return(platformView);
+                    break;
+                default:
+                    Debug.LogError("Unknown layer " + platformView.CurrentLayer);
+                    break;
             }
         }
     }

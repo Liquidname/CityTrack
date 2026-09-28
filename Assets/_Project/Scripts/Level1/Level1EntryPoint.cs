@@ -7,6 +7,7 @@ using _Project.Scripts.ObjectPools;
 using _Project.Scripts.Player;
 using _Project.Scripts.PTS;
 using _Project.Scripts.StateMachine;
+using _Project.Scripts.Upgrades;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -21,12 +22,13 @@ namespace _Project.Scripts.Level1
         private ParallaxSystem _parallaxSystem;
         private ScoreSystem _scoreSystem;
         private PlayerSystem _playerSystem;
+        private UpgradeSystem _upgradeSystem;
 #if UNITY_EDITOR
         private MovementStatsLogger _statsLogger;
 #endif
 
         public Level1EntryPoint(MovementSystem movementSystem, GameStateMachine gameStateMachine, MapGenerator generator, 
-            CameraSystem cameraSystem, ParallaxSystem parallaxSystem, ScoreSystem scoreSystem, PlayerSystem playerSystem
+            CameraSystem cameraSystem, ParallaxSystem parallaxSystem, ScoreSystem scoreSystem, PlayerSystem playerSystem, UpgradeSystem upgradeSystem
 #if UNITY_EDITOR
             , MovementStatsLogger statsLogger = null
 #endif
@@ -39,6 +41,7 @@ namespace _Project.Scripts.Level1
             _parallaxSystem = parallaxSystem;
             _scoreSystem = scoreSystem;
             _playerSystem = playerSystem;
+            _upgradeSystem = upgradeSystem;
 #if UNITY_EDITOR
             _statsLogger = statsLogger;
 #endif

@@ -50,8 +50,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Project.Scripts.Map.ChunkView
   length: 55
   skyFloorYHeight: 11
-  roofsFloorYHeight: 1.25
-  buildingFloorYHeight: -7.85
+  roofsFloorYHeight: 1.46
+  buildingFloorYHeight: -10.81
   platforms: {fileID: 534285787211516261}
 --- !u!1 &2696784508734981332
 GameObject:
@@ -155,7 +155,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 21ca8723c11d2d34abf1e9e595b0942a, type: 2}
+  - {fileID: 2100000, guid: 7ec4e7373ac023f42bc829945cdcdf38, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

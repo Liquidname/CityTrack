@@ -11,14 +11,17 @@ namespace _Project.Scripts.Map
         [SerializeField] private Transform poolRoot;
         
         [Header("Platforms")]
-        [SerializeField] private PlatformView[] platformPrefabs;
+        [SerializeField] private PlatformView[] platformBuildingPrefabs;
+        [SerializeField] private PlatformView[] platformRoofsPrefabs;
+        
         [SerializeField] private Transform platformBuildingRoot;
         [SerializeField] private Transform platformRoofsRoot;
         
         public Transform SpawnPosition => spawnPosition;
         public ChunkView[] СhunkPrefabs => chunkPrefabs;
         public Transform PoolRoot => poolRoot;
-        public PlatformView[] PlatformPrefabs => platformPrefabs;
+        public PlatformView[] PlatformBuildingPrefabs => platformBuildingPrefabs;
+        public PlatformView[] PlatformRoofsPrefabs => platformRoofsPrefabs;
         public Transform PlatformBuildingRoot => platformBuildingRoot;
         public Transform PlatformRoofsRoot => platformRoofsRoot;
         

@@ -34,7 +34,6 @@ namespace _Project.Scripts.PTS
 
         public void UpdateScoreUI(int score)
         {
-            Debug.Log($"Score: {score}");
             scoreText.SetText($"PTS: {score}");
         }
 

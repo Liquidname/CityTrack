@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using _Project.Scripts.Core;
 using _Project.Scripts.Map;
+using _Project.Scripts.Money;
 using _Project.Scripts.Movement;
 using _Project.Scripts.Player;
 using Unity.VisualScripting;
@@ -19,16 +20,18 @@ namespace _Project.Scripts.PTS
         private ScoreView _scoreView;
         private PlayerView _playerView;
         private PlayerSystem _playerSystem;
+        private MoneySystem _moneySystem;
 
         private int chain = 0;
         private float multiplier;
         
-        public ScoreSystem(MovementSystem movementSystem,  ScoreView scoreView,  PlayerView playerView,  PlayerSystem playerSystem)
+        public ScoreSystem(MovementSystem movementSystem,  ScoreView scoreView,  PlayerView playerView,  PlayerSystem playerSystem, MoneySystem moneySystem)
         {
             _movementSystem = movementSystem;
             _scoreView = scoreView;
             _playerView = playerView;
             _playerSystem = playerSystem;
+            _moneySystem = moneySystem;
         }
 
 
@@ -45,6 +48,7 @@ namespace _Project.Scripts.PTS
         {
             _playerView.HitThePlatform -= OnPlayerHitPlatform;
             _playerView.HitTheObstacle -= OnPlayerHitObstacle;
+            _playerView.BreakTheWindow -= OnPlayerBreakWindow;
         }
         
         public void Tick(float deltaTime)
@@ -63,6 +67,7 @@ namespace _Project.Scripts.PTS
                 _scoreView.UpdateHighScoreUI((int)HighScore);
             }
             
+            _moneySystem.AddMoney((int)Score/10);
             Score = 0;
             multiplier = _scoreView.RoofsMultiplier;
             _scoreView.UpdateMultiplierUI(multiplier);

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3cf670b254b463da23de035ac6490da, type: 3}
+  m_Name: UpgradeConfig
+  m_EditorClassIdentifier: Assembly-CSharp::_Project.Scripts.Upgrades.UpgradeConfig
+  definitons:
+  - id: 0
+    DisplayName: Max Speed Bonus
+    MaxLevel: 9
+    BaseCost: 15
+    CostGrowthRate: 1.6
+    ValuePerLevel: 2
+  - id: 1
+    DisplayName: Max Speed Bonus
+    MaxLevel: 9
+    BaseCost: 5
+    CostGrowthRate: 1.6
+    ValuePerLevel: 0

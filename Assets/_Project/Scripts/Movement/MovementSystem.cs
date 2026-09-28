@@ -20,6 +20,7 @@ namespace _Project.Scripts.Movement
         private readonly MovementSettings _settings;
         private readonly MapGenerator _mapGenerator;
         private readonly PlayerSystem _playerSystem;
+        private readonly MovementStats _movementStats;
 
         private bool _readyToMove;
         public FlightState FlightState { get; private set; } = FlightState.GLIDE;
@@ -37,17 +38,22 @@ namespace _Project.Scripts.Movement
         
         private bool struggleInObstacle;
 
-        public MovementSystem(MovementView movementView, PlayerView playerView, MovementSettings settings, MapContextView mapContextView, MapGenerator mapGenerator, PlayerSystem playerSystem)
+        public MovementSystem(MovementView movementView, PlayerView playerView, MovementSettings settings, MapContextView mapContextView, 
+            MapGenerator mapGenerator, PlayerSystem playerSystem, MovementStats movementStats)
         {
             _movementView = movementView;
             _playerView = playerView;
             _settings = settings;
-            _startingVelocityX = settings.HorizontalSpeed;
+            _startingVelocityX = settings.LaunchSpeed;
             _mapGenerator = mapGenerator;
             _playerSystem =  playerSystem;
             _initialPlayerPosition = playerView.transform.position;
             _initialPlayerRotation = playerView.PlayerModel.transform.rotation;
+            _movementStats = movementStats;
         }
+
+        private float EffectiveMaxHorizontalSpeed => _settings.MaxHorizontalSpeed + _movementStats.MaxSpeedBonus;
+        private float EffectiveReduceXonObstacleHit => Mathf.Lerp(_settings.ReduceXonObstacleHit, _settings.MaxReduceXonObstacleHit, _movementStats.ArmorProgress);
 
         public void ResetMovement()
         {
@@ -208,11 +214,11 @@ namespace _Project.Scripts.Movement
                 VelocityX += speedChange * deltaTime;
                 return;
             }
-
+            
             VelocityX = Mathf.Clamp(
                 VelocityX + speedChange * deltaTime,
                 minSpeed,
-                _settings.MaxHorizontalSpeed);
+                EffectiveMaxHorizontalSpeed);
         }
 
         private void OnPlayerBounce(PlatformView platform)
@@ -252,7 +258,7 @@ namespace _Project.Scripts.Movement
                 float boost = VelocityX / _settings.BounceVelocityXDivider;
                 float roofBounce = boost * (_settings.BounceYBoostMultiplier / 4f);
                 VelocityY = roofBounce;
-                VelocityX *= _settings.ReduceXonObstacleHit;
+                VelocityX *= EffectiveReduceXonObstacleHit;
                 _diveEntrySpeed = VelocityX;
 
                 if (VelocityX < _settings.MinBounceSpeed)
@@ -269,7 +275,7 @@ namespace _Project.Scripts.Movement
                 }
                 float boost = VelocityX / _settings.BounceVelocityXDivider;
                 VelocityY -= boost * (_settings.BounceYBoostMultiplier / 4f);
-                VelocityX *= _settings.ReduceXonObstacleHit;
+                VelocityX *= EffectiveReduceXonObstacleHit;
                 _diveEntrySpeed = VelocityX;
 
                 if (VelocityX < _settings.MinBounceSpeed)
@@ -281,7 +287,7 @@ namespace _Project.Scripts.Movement
             {
                 Debug.Log("Player hit obstacle wall");
                 // Разворачиваем игрока и отталкиваем назад:
-                VelocityX *= _settings.ReduceXonObstacleHit * -1f;
+                VelocityX *= EffectiveReduceXonObstacleHit * -1f;
                 _diveEntrySpeed = 0f;
             }
         }

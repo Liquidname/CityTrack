@@ -7,7 +7,7 @@ namespace _Project.Scripts.Movement
     public class MovementSettings
     {
         [Header("Скорости, м/с")]
-        [SerializeField] private float horizontalSpeed = 18f;
+        [SerializeField] private float launchSpeed = 18f;
         [SerializeField] private float minHorizontalSpeed = 4f;
         [SerializeField] private float maxHorizontalSpeed = 35f;
         [SerializeField] private float minVerticalSpeed = -35f;
@@ -43,6 +43,7 @@ namespace _Project.Scripts.Movement
         [Tooltip("Bounce Y Boost multiplier")]
         [SerializeField] private float bounceYBoostMultiplier = 1.4f;
         [SerializeField] private float reduceXonObstacleHit = 0.7f;
+        [SerializeField] private float maxReduceXonObstacleHit = 0.85f;
         [Tooltip("Минимальная скорость X для отскока от платформы, ниже которой засчитывается поражение")]
         [SerializeField] private float minBounceSpeed = 4f;
         [Tooltip("Делитель скорости X для расчета базовой силы отскока")]
@@ -53,7 +54,7 @@ namespace _Project.Scripts.Movement
         [Header("Constants")] [SerializeField] private float instantLooseY;
         
 
-        public float HorizontalSpeed => horizontalSpeed;
+        public float LaunchSpeed => launchSpeed;
         public float MinHorizontalSpeed => minHorizontalSpeed;
         public float MaxHorizontalSpeed => maxHorizontalSpeed;
         public float MinVerticalSpeed => minVerticalSpeed;
@@ -71,6 +72,7 @@ namespace _Project.Scripts.Movement
         public float GlideLiftCoefficient => glideLiftCoefficient;
         public float BounceYBoostMultiplier => bounceYBoostMultiplier;
         public float ReduceXonObstacleHit => reduceXonObstacleHit;
+        public float MaxReduceXonObstacleHit => maxReduceXonObstacleHit;
         public float MinBounceSpeed => minBounceSpeed;
         public float BounceVelocityXDivider => bounceVelocityXDivisor > 0f ? bounceVelocityXDivisor : 4f;
         public float MinRoofBounceForce => minRoofBounceForce > 0f ? minRoofBounceForce : 4f;
