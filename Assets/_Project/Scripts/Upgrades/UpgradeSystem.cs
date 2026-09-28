@@ -63,7 +63,7 @@ namespace _Project.Scripts.Upgrades
 
             _levels[id] = currentLevel + 1;
             UpdateSlotView(definiton);
-            ApplyStat(id, definiton.CalculateValue(GetLevel(id)));
+            ApplyStat(definiton, definiton.CalculateValue(GetLevel(id)));
             
             return true;
         }
@@ -71,14 +71,22 @@ namespace _Project.Scripts.Upgrades
         private void RecalculateAllStats()
         {
             Debug.Log($"Recalculating all stats");
-            foreach (var settings in _config.definitons)
+            foreach (var definiton in _config.definitons)
             {
-                ApplyStat(settings.id, settings.CalculateValue(GetLevel(settings.id)));
+                ApplyStat(definiton, definiton.CalculateValue(GetLevel(definiton.id)));
             }
         }
-        private void ApplyStat(UpgradeID id, float value)
+        private void ApplyStat(UpgradeDefiniton definiton, float value)
         {
+            var id = definiton.id;
             Debug.Log($"Applying stat {id}");
+
+            if (definiton.platformConfig != null)
+            {
+                ApplyPlatformStat(definiton, value);
+                return;
+            }
+            
             switch (id)
             {
                 case UpgradeID.MAX_SPEED_BONUS:
@@ -86,6 +94,17 @@ namespace _Project.Scripts.Upgrades
                     break;
                 case UpgradeID.ARMOR:
                     _stats.ArmorProgress = value;
+                    break;
+            }
+        }
+
+        private void ApplyPlatformStat(UpgradeDefiniton definition, float value)
+        {
+            var id = definition.id;
+            switch (id)
+            {
+                case UpgradeID.BASE_PLATFORM_BOUNCE_MULTIPLIER:
+                    _stats.PlatformBounceBonus[definition.platformConfig] = value;
                     break;
             }
         }

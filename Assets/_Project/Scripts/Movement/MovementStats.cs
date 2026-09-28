@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using _Project.Scripts.Map;
+
 namespace _Project.Scripts.Movement
 {
     /// <summary>
@@ -9,5 +12,6 @@ namespace _Project.Scripts.Movement
     {
         public float MaxSpeedBonus = 0f;
         public float ArmorProgress = 0f;
+        public Dictionary<PlatformConfig, float> PlatformBounceBonus  = new();
     }
 }

@@ -55,6 +55,11 @@ namespace _Project.Scripts.Movement
         private float EffectiveMaxHorizontalSpeed => _settings.MaxHorizontalSpeed + _movementStats.MaxSpeedBonus;
         private float EffectiveReduceXonObstacleHit => Mathf.Lerp(_settings.ReduceXonObstacleHit, _settings.MaxReduceXonObstacleHit, _movementStats.ArmorProgress);
 
+        private float GetEffectivePlatformMultiplier(PlatformConfig platformConfig)
+        {
+            return platformConfig.baseBoostMultiplier + _movementStats.PlatformBounceBonus[platformConfig];
+        }
+
         public void ResetMovement()
         {
             _readyToMove = false;
@@ -229,7 +234,7 @@ namespace _Project.Scripts.Movement
                 return;
             }
 
-            AddBounceForce(_settings.BounceYBoostMultiplier, platform.PlatformBoostMultiplier);
+            AddBounceForce(_settings.BounceYBoostMultiplier, platform);
         }
         
         private void OnPlayerHitObstacle(Vector2 normal)
@@ -243,10 +248,10 @@ namespace _Project.Scripts.Movement
             CalculateObstacleBounce(normal);
         }
 
-        private void AddBounceForce(float multiplier, float platFormMultiplier)
+        private void AddBounceForce(float multiplier, PlatformView platform)
         {
             float boost = VelocityX / _settings.BounceVelocityXDivider;
-            VelocityY += boost * platFormMultiplier * multiplier;
+            VelocityY += boost * GetEffectivePlatformMultiplier(platform.Config) * multiplier;
         }
         
         private void CalculateObstacleBounce(Vector2 normal)
