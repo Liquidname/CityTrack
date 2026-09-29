@@ -13,5 +13,14 @@ namespace _Project.Scripts.Movement
         public float MaxSpeedBonus = 0f;
         public float ArmorProgress = 0f;
         public Dictionary<PlatformConfig, float> PlatformBounceBonus  = new();
+        
+        public float GetPlatformBounceBonus(PlatformConfig config)
+        {
+            if (config != null && PlatformBounceBonus.TryGetValue(config, out var bonus))
+            {
+                return bonus;
+            }
+            return 0f;
+        }
     }
 }

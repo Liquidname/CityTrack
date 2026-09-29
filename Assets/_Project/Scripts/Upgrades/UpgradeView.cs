@@ -17,9 +17,12 @@ namespace _Project.Scripts.Upgrades
     
     public class UpgradeView : MonoBehaviour
     {
+        [SerializeField] private GameObject _shopObject;
         [SerializeField] private UpgradeSlot[] upgradeSlots;
         private readonly Dictionary<UpgradeID, UpgradeSlot> _slotsById = new();
         public event Action<UpgradeID> buttonPressed;
+        
+        public GameObject ShopObject => _shopObject;
         private void Awake()
         {
             foreach (var slot in upgradeSlots)

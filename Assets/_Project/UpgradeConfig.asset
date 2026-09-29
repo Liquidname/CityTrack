@@ -33,4 +33,11 @@ MonoBehaviour:
     MaxLevel: 9
     BaseCost: 15
     CostGrowthRate: 1.6
-    ValuePerLevel: 0.1
+    ValuePerLevel: 1
+  - id: 3
+    DisplayName: Brick Bounce
+    platformConfig: {fileID: 11400000, guid: 5748254e787fb0145b8548dce48d3c35, type: 2}
+    MaxLevel: 9
+    BaseCost: 15
+    CostGrowthRate: 1.6
+    ValuePerLevel: 1

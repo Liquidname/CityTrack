@@ -22,7 +22,7 @@ namespace _Project.Scripts.Upgrades
         {
             if (level <= 0) return 0f;
 
-            if (id == UpgradeID.ARMOR)
+            if (id == UpgradeID.Armor)
             {
                 if (MaxLevel <= 0) return 0f;
                 float t = Mathf.Clamp01((float)level / MaxLevel);

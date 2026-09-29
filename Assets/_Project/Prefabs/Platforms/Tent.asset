@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Tent
   m_EditorClassIdentifier: Assembly-CSharp::_Project.Scripts.Map.PlatformConfig
   displayName: Tent
-  baseBoostMultiplier: 2.4
+  baseBoostMultiplier: 2.65
   isBuildingSaver: 1

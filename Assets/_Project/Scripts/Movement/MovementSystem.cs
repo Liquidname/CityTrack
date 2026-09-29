@@ -57,7 +57,9 @@ namespace _Project.Scripts.Movement
 
         private float GetEffectivePlatformMultiplier(PlatformConfig platformConfig)
         {
-            return platformConfig.baseBoostMultiplier + _movementStats.PlatformBounceBonus[platformConfig];
+            // Сюда бы юнит тест написать
+            if (platformConfig == null) return 1f;
+            return platformConfig.baseBoostMultiplier + _movementStats.GetPlatformBounceBonus(platformConfig);
         }
 
         public void ResetMovement()

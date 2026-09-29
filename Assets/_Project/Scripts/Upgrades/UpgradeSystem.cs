@@ -28,6 +28,11 @@ namespace _Project.Scripts.Upgrades
             UpdateAllViews();
         }
 
+        public void EnableShop(bool enable)
+        {
+            _upgradeView.ShopObject.SetActive(enable);
+        }
+
         private void OnButtonPressed(UpgradeID id)
         {
             Debug.Log("Buy Button Pressed");
@@ -89,24 +94,21 @@ namespace _Project.Scripts.Upgrades
             
             switch (id)
             {
-                case UpgradeID.MAX_SPEED_BONUS:
+                case UpgradeID.MaxSpeedBonus:
                     _stats.MaxSpeedBonus = value;
                     break;
-                case UpgradeID.ARMOR:
+                case UpgradeID.Armor:
                     _stats.ArmorProgress = value;
+                    break;
+                default:
+                    Debug.LogError($"Unknown stat {id}");
                     break;
             }
         }
 
         private void ApplyPlatformStat(UpgradeDefiniton definition, float value)
         {
-            var id = definition.id;
-            switch (id)
-            {
-                case UpgradeID.BASE_PLATFORM_BOUNCE_MULTIPLIER:
-                    _stats.PlatformBounceBonus[definition.platformConfig] = value;
-                    break;
-            }
+            //_stats.PlatformBounceBonus[definition.platformConfig] = value;
         }
     }
 }
