@@ -3,11 +3,11 @@ using _Project.Scripts.Movement;
 
 namespace _Project.Scripts.StateMachine
 {
-    public class RunState : IGameState
+    public class StartSection : IGameState
     {
         MovementSystem _movementSystem;
 
-        public RunState(MovementSystem movementSystem)
+        public StartSection(MovementSystem movementSystem)
         {
             _movementSystem = movementSystem;
         }
@@ -23,7 +23,6 @@ namespace _Project.Scripts.StateMachine
 
         public void Exit()
         {
-            _movementSystem.StopMoving();
         }
     }
 }

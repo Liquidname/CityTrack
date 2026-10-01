@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: BrickConfig
   m_EditorClassIdentifier: Assembly-CSharp::_Project.Scripts.Map.PlatformConfig
   displayName: Brick
-  baseBoostMultiplier: 0.1
+  baseBoostMultiplier: 1
   isBuildingSaver: 0

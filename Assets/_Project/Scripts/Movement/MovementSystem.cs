@@ -254,6 +254,7 @@ namespace _Project.Scripts.Movement
         {
             float boost = VelocityX / _settings.BounceVelocityXDivider;
             VelocityY += boost * GetEffectivePlatformMultiplier(platform.Config) * multiplier;
+            VelocityY = Mathf.Max(VelocityY, _settings.MinBounceSpeed);
         }
         
         private void CalculateObstacleBounce(Vector2 normal)

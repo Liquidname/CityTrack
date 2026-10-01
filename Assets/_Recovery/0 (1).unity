@@ -1584,7 +1584,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &482167980
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4014,7 +4014,7 @@ MonoBehaviour:
     drag: 0.15
     glideLiftCoefficient: 0.35
     bounceYBoostMultiplier: 2
-    reduceXonObstacleHit: 0.5
+    reduceXonObstacleHit: 0.6
     maxReduceXonObstacleHit: 0.7
     minBounceSpeed: 4
     bounceVelocityXDivisor: 4

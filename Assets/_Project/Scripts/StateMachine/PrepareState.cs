@@ -44,7 +44,7 @@ namespace _Project.Scripts.StateMachine
 
             if (Input.GetMouseButtonDown(0))
             {
-                _sfm.Enter<RunState>();
+                _sfm.Enter<StartSection>();
             };
         }
 

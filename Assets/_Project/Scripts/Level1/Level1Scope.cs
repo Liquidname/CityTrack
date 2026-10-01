@@ -58,7 +58,7 @@ namespace _Project.Scripts.Level1
             builder.Register<GameStateMachine>(Lifetime.Singleton);
         
             builder.Register<PrepareState>(Lifetime.Singleton);
-            builder.Register<RunState>(Lifetime.Singleton);
+            builder.Register<StartSection>(Lifetime.Singleton);
             builder.Register<DefeatState>(Lifetime.Singleton);
         
             builder.Register<ParallaxSystem>(Lifetime.Singleton);

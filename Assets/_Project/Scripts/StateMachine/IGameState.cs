@@ -4,9 +4,7 @@ namespace _Project.Scripts.StateMachine
 {
     public interface IGameState
     {
-        void Enter()
-        {
-        }
+        void Enter();
         void Tick(float deltaTime);
         void Exit();
     }

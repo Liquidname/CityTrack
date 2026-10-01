@@ -35,27 +35,3 @@ namespace _Project.Scripts.StateMachine
         }
     }
 }
-
-/* Сегодня уже спать пойду, вот в нейронке это было, 10 сентября дописать всё надо
-// ===== Состояния =====
-public class PreparationState : IRunState
-{
-    private readonly RunStateMachine _fsm;
-
-    public PreparationState(RunStateMachine fsm) => _fsm = fsm;
-
-    public void Enter()
-    {
-        Debug.Log("Preparation: Enter");
-        // спавн уровня, обратный отсчёт, UI подготовки
-    }
-
-    public void Tick()
-    {
-        // например, ждём таймер или тап игрока
-        // if (готово) _fsm.Enter<GameplayState>();
-    }
-
-    public void Exit() => Debug.Log("Preparation: Exit");
-}
-*/

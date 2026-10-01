@@ -17,27 +17,27 @@ MonoBehaviour:
     DisplayName: Max Speed Bonus
     platformConfig: {fileID: 0}
     MaxLevel: 9
-    BaseCost: 15
+    BaseCost: 30
     CostGrowthRate: 1.6
     ValuePerLevel: 2
   - id: 1
     DisplayName: Armor
     platformConfig: {fileID: 0}
     MaxLevel: 9
-    BaseCost: 5
+    BaseCost: 30
     CostGrowthRate: 1.6
     ValuePerLevel: 0
   - id: 2
     DisplayName: Brick Bounce
     platformConfig: {fileID: 11400000, guid: 02a49188f3c51b646bde60319f03937c, type: 2}
     MaxLevel: 9
-    BaseCost: 15
+    BaseCost: 30
     CostGrowthRate: 1.6
-    ValuePerLevel: 1
+    ValuePerLevel: 0.1
   - id: 3
     DisplayName: Brick Bounce
     platformConfig: {fileID: 11400000, guid: 5748254e787fb0145b8548dce48d3c35, type: 2}
     MaxLevel: 9
-    BaseCost: 15
+    BaseCost: 30
     CostGrowthRate: 1.6
-    ValuePerLevel: 1
+    ValuePerLevel: 0.1
