@@ -11,17 +11,17 @@ namespace _Project.Scripts.StateMachine
     public class PrepareState : IGameState
     {
         private readonly GameStateMachine _sfm;
-        private readonly MapGenerator _mapGenerator;
+        private readonly MapGeneratorSystem _mapGeneratorSystem;
         private readonly MovementSystem _movementSystem;
         private readonly ScoreSystem _scoreSystem;
         private readonly PlayerSystem _playerSystem;
         private readonly UpgradeSystem _upgradeSystem;
 
-        public PrepareState(GameStateMachine sfm, MapGenerator mapGenerator, MovementSystem movementSystem, ScoreSystem scoreSystem, 
+        public PrepareState(GameStateMachine sfm, MapGeneratorSystem mapGeneratorSystem, MovementSystem movementSystem, ScoreSystem scoreSystem, 
             PlayerSystem playerSystem, UpgradeSystem upgradeSystem)
         {
             _sfm = sfm;
-            _mapGenerator = mapGenerator;
+            _mapGeneratorSystem = mapGeneratorSystem;
             _movementSystem = movementSystem;
             _scoreSystem = scoreSystem;
             _playerSystem = playerSystem;
@@ -30,7 +30,7 @@ namespace _Project.Scripts.StateMachine
         
         public void Enter()
         {
-            _mapGenerator.ResetMap();
+            _mapGeneratorSystem.ResetMap();
             _movementSystem.ResetMovement();
             _scoreSystem.ResetScore();
             _playerSystem.ResetPlayer();

@@ -33,5 +33,15 @@ namespace _Project.Scripts.StateMachine
         {
             _current.Tick(deltaTime);
         }
+        
+        public string GetState()
+        {
+            if (_current != null)
+            {
+                return _current.GetType().Name;
+            }
+
+            return null;
+        }
     }
 }

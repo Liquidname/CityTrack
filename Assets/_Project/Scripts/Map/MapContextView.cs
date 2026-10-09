@@ -17,6 +17,15 @@ namespace _Project.Scripts.Map
         [SerializeField] private Transform platformBuildingRoot;
         [SerializeField] private Transform platformRoofsRoot;
         
+        [Header("VFX")]
+        [SerializeField] private GameObject fastWind;
+        [SerializeField] private Transform fastWindStartPos;
+        [SerializeField] private Transform fastWindSustainedPos;
+        [SerializeField] private float fastWindSmooth;
+        
+        [Header("SFX")]
+        [SerializeField] private AudioClip secondMapSectionEnterSFX;
+        
         public Transform SpawnPosition => spawnPosition;
         public ChunkView[] СhunkPrefabs => chunkPrefabs;
         public Transform PoolRoot => poolRoot;
@@ -24,6 +33,10 @@ namespace _Project.Scripts.Map
         public PlatformView[] PlatformRoofsPrefabs => platformRoofsPrefabs;
         public Transform PlatformBuildingRoot => platformBuildingRoot;
         public Transform PlatformRoofsRoot => platformRoofsRoot;
-        
+        public GameObject FastWind => fastWind;
+        public Transform FastWindStartPos => fastWindStartPos;
+        public Transform FastWindSustainedPos => fastWindSustainedPos;
+        public float FastWindSmooth => fastWindSmooth;
+        public AudioClip SecondMapSectionEnterSFX => secondMapSectionEnterSFX;
     }
 }

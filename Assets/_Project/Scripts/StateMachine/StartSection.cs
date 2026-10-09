@@ -5,11 +5,13 @@ namespace _Project.Scripts.StateMachine
 {
     public class StartSection : IGameState
     {
-        MovementSystem _movementSystem;
+        private MovementSystem _movementSystem;
+        private GameStateMachine _sfm;
 
-        public StartSection(MovementSystem movementSystem)
+        public StartSection(MovementSystem movementSystem,  GameStateMachine sfm)
         {
             _movementSystem = movementSystem;
+            _sfm = sfm;
         }
         
         public void Enter()
@@ -19,6 +21,11 @@ namespace _Project.Scripts.StateMachine
 
         public void Tick(float deltaTime)
         {
+            // Hardcode, just idk where to put it
+            if (_movementSystem.PassedDistance >= 500)
+            {
+                _sfm.Enter<SecondMapSectionState>();
+            }
         }
 
         public void Exit()
