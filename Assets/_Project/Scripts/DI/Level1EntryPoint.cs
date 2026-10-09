@@ -55,6 +55,7 @@ namespace _Project.Scripts.DI
             _movementSystem.Start();
             _generator.Start();
             _playerSystem.Start();
+            _upgradeSystem.Start();
 #if UNITY_EDITOR
             _statsLogger?.Start();
 #endif

@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using _Project.Scripts.Core;
 using _Project.Scripts.Money;
 using _Project.Scripts.Movement;
 using UnityEngine;
 
 namespace _Project.Scripts.Upgrades
 {
-    public class UpgradeSystem
+    public class UpgradeSystem : IGameStart
     {
         private UpgradeConfig _config;
         private MoneySystem _moneySystem;
@@ -23,6 +24,11 @@ namespace _Project.Scripts.Upgrades
             _stats = stats;
             _upgradeView = upgradeView;
 
+            
+        }
+        
+        public void Start()
+        {
             _upgradeView.buttonPressed += OnButtonPressed;
             RecalculateAllStats();
             UpdateAllViews();
@@ -110,5 +116,7 @@ namespace _Project.Scripts.Upgrades
         {
             //_stats.PlatformBounceBonus[definition.platformConfig] = value;
         }
+
+        
     }
 }
