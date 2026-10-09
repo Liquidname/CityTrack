@@ -51,7 +51,13 @@ namespace _Project.Scripts.Movement
         [Tooltip("Минимальная сила вертикального отскока от крыши препятствия")]
         [SerializeField] private float minRoofBounceForce = 4f;
 
-        [Header("Constants")] [SerializeField] private float instantLooseY;
+        [Header("Constants")]
+        [SerializeField] private float instantLooseY;
+        
+        [Header("Second Map Section")]
+        [SerializeField] private float initialWindDrag;
+        [SerializeField] private float sustainedWindDrag;
+        [SerializeField] private float windFadeRate = 3.0f;
         
 
         public float LaunchSpeed => launchSpeed;
@@ -77,5 +83,8 @@ namespace _Project.Scripts.Movement
         public float BounceVelocityXDivider => bounceVelocityXDivisor > 0f ? bounceVelocityXDivisor : 4f;
         public float MinRoofBounceForce => minRoofBounceForce > 0f ? minRoofBounceForce : 4f;
         public float InstantLooseY => instantLooseY;
+        public float InitialWindDrag => initialWindDrag;
+        public float SustainedWindDrag => sustainedWindDrag;
+        public float WindFadeRate => windFadeRate;
     }
 }

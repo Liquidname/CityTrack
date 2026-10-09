@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using _Project.Scripts.Map;
+using UnityEngine;
 
 namespace _Project.Scripts.Movement
 {
@@ -13,6 +14,15 @@ namespace _Project.Scripts.Movement
         public float MaxSpeedBonus = 0f;
         public float ArmorProgress = 0f;
         public Dictionary<PlatformConfig, float> PlatformBounceBonus  = new();
+        
+        public float WindDrag { get; private set; }
+
+        public void SetWind(float drag) => WindDrag = drag;
+        public void ClearWind() => WindDrag = 0f;
+        public void FadeWindTo(float target, float step)
+        {
+            WindDrag = Mathf.MoveTowards(WindDrag, target, step);
+        }
         
         public float GetPlatformBounceBonus(PlatformConfig config)
         {

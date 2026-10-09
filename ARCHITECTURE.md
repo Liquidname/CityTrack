@@ -6,46 +6,43 @@
 
 ```
 Assets/_Project/Scripts/
+├── Audio/          — звуковая система (AudioSystem, AudioView)
 ├── Camera/         — следование камеры за игроком (CameraSystem, CameraView, CameraSettings)
-├── Core/           — базовые интерфейсы и глобальная точка входа (Game, GameEntryPoint, IGameTick, IGameStart)
-├── DI/             — RootScope (глобальный VContainer скоуп)
+├── Core/           — базовые интерфейсы (IGameTick, IGameStart)
+├── DI/             — единственный LifetimeScope и точка входа (Level1Scope, Level1EntryPoint, DebugPanel, Weather)
 ├── Graphics/
 │   └── Parralax/   — фоновый параллакс-скроллинг (ParallaxSystem, ParallaxView)
-├── Level1/         — скоуп и точка входа уровня (Level1Scope, Level1EntryPoint, DebugPanel)
-├── Map/            — генерация карты, чанки и платформы (MapGenerator, ChunkView, PlatformView, PlatformConfig, MapContextView, MapGeneratorView)
+├── Map/            — генерация карты, чанки и платформы (MapGeneratorSystem, ChunkView, PlatformView, PlatformConfig, MapContextView, MapGeneratorView)
 ├── Money/          — внутриигровая валюта (MoneySystem, MoneyView)
 ├── Movement/       — физика полёта, скорости, модификаторы (MovementSystem, MovementSettings, MovementStats, MovementView, MovementStatsLogger)
 ├── ObjectPools/    — пулы объектов (ObjectPool<T>, ChunkPool, PlatformPool)
 ├── Player/         — игрок, уровень полёта, коллизии (PlayerView, PlayerSystem, MapLayer)
 ├── PTS/            — очки, комбо-серии, множители (ScoreSystem, ScoreView)
-├── StateMachine/   — стейт-машина игрового цикла (GameStateMachine, IGameState, PrepareState, RunState, DefeatState)
+├── StateMachine/   — стейт-машина игрового цикла (GameStateMachine, IGameState, PrepareState, StartSection, SecondMapSectionState, DefeatState)
 ├── Upgrades/       — магазин улучшений между забегами (UpgradeSystem, UpgradeConfig, UpgradeDefiniton, UpgradeID, UpgradeView)
 ```
 
 ## DI-контейнер (VContainer)
 
-### RootScope (`Scripts/DI/RootScope.cs`)
-- `Game` — Singleton
-- `GameEntryPoint` — entry point (`IStartable`, `ITickable`)
+### Level1Scope (`Scripts/DI/Level1Scope.cs`)
+Единственный LifetimeScope проекта.
 
-### Level1Scope (`Scripts/Level1/Level1Scope.cs`)
-Дочерний скоуп уровня. Регистрации:
-
-- **Компоненты сцены** (RegisterComponent): `PlayerView`, `MovementView`, `MapContextView`, `MapGeneratorView`, `CameraView`, `ParallaxView`, `ScoreView`, `MoneyView`, `UpgradeView`
+- **Компоненты сцены** (RegisterComponent): `PlayerView` (как `MovementView`), `MovementView`, `MapContextView`, `MapGeneratorView`, `CameraView`, `ParallaxView`, `ScoreView`, `MoneyView`, `UpgradeView`, `AudioView`
 - **Singleton-сервисы**:
+  - `ChunkPool`, `PlatformPool`
+  - `MapGeneratorSystem`
+  - `UpgradeSystem` (с `WithParameter(upgradeConfig)`)
+  - `PlayerSystem`
   - `MovementSystem` (с `WithParameter(movementSettings)`)
   - `CameraSystem` (с `WithParameter(cameraSettings)`)
   - `GameStateMachine`
-  - `PlayerSystem`
-  - `MapGenerator`
-  - `ChunkPool`, `PlatformPool`
   - `ParallaxSystem`
-  - `ScoreSystem`
   - `MoneySystem`
+  - `ScoreSystem`
   - `MovementStats`
-  - `UpgradeSystem` (с `WithParameter(upgradeConfig)`)
+  - `AudioSystem`
   - `MovementStatsLogger` (под `#if UNITY_EDITOR`)
-- **Состояния** (Singleton): `PrepareState`, `RunState`, `DefeatState`
+- **Состояния** (Singleton): `PrepareState`, `DefeatState`, `StartSection`, `SecondMapSectionState` (с `WithParameter(movementSettings)`)
 - **Точка входа**: `Level1EntryPoint` (`IStartable`, `ITickable`, `IDisposable`)
 
 ## Инициализация уровня
@@ -53,20 +50,20 @@ Assets/_Project/Scripts/
 `Level1EntryPoint.Start()`:
 1. `GameStateMachine.Enter<PrepareState>()` — вход в состояние подготовки
 2. Подписка `MovementSystem.Defeated` → `GameStateMachine.Enter<DefeatState>()`
-3. Ручной вызов `Start()` у систем: `MovementSystem`, `MapGenerator`, `PlayerSystem`, `ScoreSystem` (и `MovementStatsLogger` в редакторе)
+3. Ручной вызов `Start()` у систем: `MovementSystem`, `MapGeneratorSystem`, `PlayerSystem`, `ScoreSystem` (и `MovementStatsLogger` в редакторе)
 
 ## Игровой цикл (Tick)
 
 Единственная точка обновления сцены — `Level1EntryPoint.Tick()`:
 
 ```
-1. MovementSystem.Tick(dt)      — режим полёта, расчёт скоростей, перемещение чанков/игрока, вращение модели, проверка поражения
-2. GameStateMachine.Tick(dt)    — делегирует текущему IGameState.Tick(dt)
-3. MapGenerator.Tick(dt)        — (пока пустой, подготовлен для процедурной генерации)
-4. CameraSystem.Tick(dt)        — следование камеры за игроком с мёртвой зоной
-5. ParallaxSystem.Tick(dt)      — смещение фоновых слоёв
-6. ScoreSystem.Tick(dt)         — начисление очков за пройденное расстояние
-7. MovementStatsLogger.Tick(dt) — сбор телеметрии полёта (под #if UNITY_EDITOR)
+1. MovementSystem.Tick(dt)        — режим полёта, расчёт скоростей, перемещение чанков/игрока, вращение модели, проверка поражения
+2. GameStateMachine.Tick(dt)      — делегирует текущему IGameState.Tick(dt)
+3. MapGeneratorSystem.Tick(dt)    — (пока пустой, подготовлен для процедурной генерации)
+4. CameraSystem.Tick(dt)          — следование камеры за игроком с мёртвой зоной
+5. ParallaxSystem.Tick(dt)        — смещение фоновых слоёв
+6. ScoreSystem.Tick(dt)           — начисление очков за пройденное расстояние
+7. MovementStatsLogger.Tick(dt)   — сбор телеметрии полёта (под #if UNITY_EDITOR)
 ```
 
 Независимых `Update()` в MonoBehaviour нет (кроме `DebugPanel` под `#if UNITY_EDITOR`).
@@ -87,9 +84,11 @@ Assets/_Project/Scripts/
 
 ### Модификаторы от апгрейдов (`MovementStats`)
 
-DTO-класс, хранящий бонусы из системы улучшений. Используется `MovementSystem` для расчёта эффективных значений:
+Хранит бонусы из системы улучшений и модификаторы уровня. Используется `MovementSystem` для расчёта эффективных значений:
 - `MaxSpeedBonus` → `EffectiveMaxHorizontalSpeed = MaxHorizontalSpeed + MaxSpeedBonus`
 - `ArmorProgress` → `EffectiveReduceXonObstacleHit = Lerp(ReduceXonObstacleHit, MaxReduceXonObstacleHit, ArmorProgress)`
+- `WindDrag` — сопротивление встречного ветра (применяется `SecondMapSectionState`): `SetWind(drag)` / `ClearWind()` / `FadeWindTo(target, step)`
+- `PlatformBounceBonus` — словарь бонусов отскока по типу платформы (`Dictionary<PlatformConfig, float>`)
 
 ### Настройки (`MovementSettings`)
 
@@ -104,6 +103,7 @@ DTO-класс, хранящий бонусы из системы улучшен
 | Отскок | `bounceYBoostMultiplier` (1.4), `bounceVelocityXDivisor` (4), `minBounceSpeed` (4) | Отскок от платформ |
 | Препятствия | `reduceXonObstacleHit` (0.7), `maxReduceXonObstacleHit` (0.85), `minRoofBounceForce` (4) | Столкновение с препятствиями |
 | Поражение | `instantLooseY` | Мировая Y-координата мгновенного проигрыша |
+| Second Map Section | `initialWindDrag`, `sustainedWindDrag`, `windFadeRate` (3.0) | Параметры встречного ветра второй секции |
 
 ## Физические взаимодействия
 
@@ -157,7 +157,7 @@ DTO-класс, хранящий бонусы из системы улучшен
 ### Контейнеры данных карты
 
 - **`ChunkView`**: MonoBehaviour на префабе чанка. Хранит `length`, контейнер `Transform platforms`, высоты этажей (`skyFloorYHeight`, `roofsFloorYHeight`, `buildingFloorYHeight`).
-- **`MapContextView`**: MonoBehaviour на сцене. Ссылки на массивы префабов чанков и платформ, корни пулов (`PlatformRoofsRoot`, `PlatformBuildingRoot`, `PoolRoot`), позицию спавна.
+- **`MapContextView`**: MonoBehaviour на сцене. Ссылки на массивы префабов чанков и платформ, корни пулов (`PlatformRoofsRoot`, `PlatformBuildingRoot`, `PoolRoot`), позицию спавна. Также хранит VFX-объект ветра (`FastWind`, `FastWindStartPos`, `FastWindSustainedPos`, `FastWindSmooth`) и SFX клип (`SecondMapSectionEnterSFX`) для второй секции.
 - **`MapGeneratorView`**: MonoBehaviour на сцене. Настройки генерации: расстояние между зданиями, диапазон высот, количество платформ, родитель чанков.
 
 ## Платформы
@@ -208,17 +208,20 @@ public enum MapLayer { SKY, ROOFS, BUILDING }
 
 ## Стейт-машина (`GameStateMachine`)
 
-Реализует `IGameTick`. Резолвит состояния через `IObjectResolver.Resolve<T>()`. Состояния зарегистрированы как **Singleton**.
+Реализует `IGameTick`. Резолвит состояния через `IObjectResolver.Resolve<T>()`. Состояния зарегистрированы как **Singleton**. Метод `GetState()` возвращает имя текущего состояния (используется `DebugPanel`).
 
 Жизненный цикл забега:
 
 ```
-PrepareState → (клик) → RunState → (Defeated) → DefeatState → (клик) → PrepareState
+PrepareState → (клик) → StartSection → (PassedDistance ≥ 500) → SecondMapSectionState
+                                                                         ↓ (Defeated)
+PrepareState ← (клик) ←————————————————————————— DefeatState ←——————————┘
 ```
 
-- **PrepareState**: `Enter()` — сброс карты, движения, очков, игрока. `Tick()` — ожидание клика (не над UI).
-- **RunState**: `Enter()` → `MovementSystem.StartMoving()`. `Exit()` → `StopMoving()`. `Tick()` пустой.
-- **DefeatState**: `Enter()` пустой. `Tick()` — ожидание клика для перехода в `PrepareState`.
+- **PrepareState**: `Enter()` — сброс карты, движения, очков, игрока, открытие магазина апгрейдов. `Exit()` — закрытие магазина. `Tick()` — ожидание клика (не над UI) → переход в `StartSection`.
+- **StartSection**: `Enter()` → `MovementSystem.StartMoving()`. `Tick()` — переход в `SecondMapSectionState` при `PassedDistance ≥ 500`.
+- **SecondMapSectionState**: `Enter()` — звуковой эффект, активация VFX ветра, установка начального `WindDrag`. `Tick()` — плавное нарастание ветра (`FadeWindTo`), анимация VFX объекта. `Exit()` — деактивация VFX, сброс `WindDrag`.
+- **DefeatState**: `Enter()` → `MovementSystem.StopMoving()`. `Tick()` — ожидание клика для перехода в `PrepareState`.
 
 ## Игрок
 
@@ -292,6 +295,12 @@ MonoBehaviour. Хранит `direction` (Vector3.up), ссылку на `playerM
 | `ARMOR` | Снижение потери скорости при ударе об препятствие | Квадратичная кривая с насыщением | ✅ Работает |
 | `BASE_PLATFORM_BOUNCE_MULTIPLIER` | Множитель отскока от платформ | — | ❌ Не подключён |
 
+## Звук (`AudioSystem`)
+
+- `AudioSystem` — singleton-сервис, обёртка над `AudioSource`. Методы: `PlaySound(AudioClip)`, `PlaySound(AudioClip, float volume)`.
+- `AudioView` — MonoBehaviour на сцене. Хранит `sfxSource` (AudioSource).
+- Используется `SecondMapSectionState` для воспроизведения SFX при входе во вторую секцию.
+
 ## Ключевые интерфейсы
 
 - **`IGameTick`** (`Core/IGameTick.cs`): `void Tick(float deltaTime)` — единый интерфейс обновления.
@@ -309,7 +318,8 @@ MonoBehaviour. Хранит `direction` (Vector3.up), ссылку на `playerM
 | `ScoreView` | `PTS/ScoreView.cs` | UI очков/комбо/множителя/рекорда + настройки начисления (хранит параметры) |
 | `MoneyView` | `Money/MoneyView.cs` | UI баланса валюты |
 | `UpgradeView` | `Upgrades/UpgradeView.cs` | UI магазина улучшений (слоты с кнопками покупки) |
-| `MapContextView` | `Map/MapContextView.cs` | Ссылки на префабы и корни пулов |
+| `AudioView` | `Audio/AudioView.cs` | Хранит `AudioSource` для SFX |
+| `MapContextView` | `Map/MapContextView.cs` | Ссылки на префабы, корни пулов, VFX/SFX второй секции |
 | `MapGeneratorView` | `Map/MapGeneratorView.cs` | Настройки генерации (расстояния, высоты, количество платформ) |
 | `ChunkView` | `Map/ChunkView.cs` | Данные чанка: длина, контейнер платформ, высоты этажей |
 | `PlatformView` | `Map/PlatformView.cs` | Тип платформы, множитель отскока, текущий слой |
@@ -320,8 +330,9 @@ MonoBehaviour. Хранит `direction` (Vector3.up), ссылку на `playerM
   - Под `#if UNITY_EDITOR`. Реализует `IGameTick`, `IGameStart`, `IDisposable`.
   - Логирует телеметрию скоростей X/Y с интервалом 0.5 с, столкновения с платформами и препятствиями.
   - Подписка на `Defeated` для вывода сводного отчёта (`RUN STATISTICS`).
-- **`DebugPanel`** (`Level1/DebugPanel.cs`):
-  - MonoBehaviour (под `#if UNITY_EDITOR`) для отображения параметров на экране.
+- **`DebugPanel`** (`DI/DebugPanel.cs`):
+  - MonoBehaviour (под `#if UNITY_EDITOR`) для отображения VelocityX/Y, PassedDistance, FlightLayer, текущего GameState на экране.
+  - Получает зависимости через `[Inject]`.
 
 ## Известные особенности
 
@@ -329,6 +340,6 @@ MonoBehaviour. Хранит `direction` (Vector3.up), ссылку на `playerM
 - `PlatformConfig` — ScriptableObject-заготовка (пока только `displayName`, не используется).
 - `UpgradeID.BASE_PLATFORM_BOUNCE_MULTIPLIER` заведён, но ветка `ApplyStat` пустая.
 - `ScoreSystem.multiplier` (множитель зоны) хранится, обновляется, отображается в UI, но не участвует в формуле `AddScore`.
-- `MapGenerator.Tick()` пустой.
-- `Game.Tick()` на RootScope-уровне пустой.
-- В `GameStateMachine` есть закомментированный блок старого дизайна состояний.
+- `MapGeneratorSystem.Tick()` пустой.
+- `SecondMapSectionState` получает `MovementSettings` через `WithParameter` напрямую — временный костыль, отмеченный в коде как требующий рефакторинга.
+- `Debug.Log("Move Fast Wind")` в `SecondMapSectionState.MoveFastWind()` — лишнее логирование в Tick.

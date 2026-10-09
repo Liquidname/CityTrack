@@ -18,7 +18,7 @@ namespace _Project.Scripts.Movement
         private readonly MovementView _movementView;
         private readonly PlayerView _playerView;
         private readonly MovementSettings _settings;
-        private readonly MapGenerator _mapGenerator;
+        private readonly MapGeneratorSystem _mapGeneratorSystem;
         private readonly PlayerSystem _playerSystem;
         private readonly MovementStats _movementStats;
 
@@ -33,19 +33,20 @@ namespace _Project.Scripts.Movement
         private readonly float _startingVelocityX;
         public float VelocityX { get; private set; }
         public float VelocityY { get; private set; }
+        public float PassedDistance { get; private set; }
         
         public event Action Defeated;
         
         private bool struggleInObstacle;
 
         public MovementSystem(MovementView movementView, PlayerView playerView, MovementSettings settings, MapContextView mapContextView, 
-            MapGenerator mapGenerator, PlayerSystem playerSystem, MovementStats movementStats)
+            MapGeneratorSystem mapGeneratorSystem, PlayerSystem playerSystem, MovementStats movementStats)
         {
             _movementView = movementView;
             _playerView = playerView;
             _settings = settings;
             _startingVelocityX = settings.LaunchSpeed;
-            _mapGenerator = mapGenerator;
+            _mapGeneratorSystem = mapGeneratorSystem;
             _playerSystem =  playerSystem;
             _initialPlayerPosition = playerView.transform.position;
             _initialPlayerRotation = playerView.PlayerModel.transform.rotation;
@@ -54,6 +55,7 @@ namespace _Project.Scripts.Movement
 
         private float EffectiveMaxHorizontalSpeed => _settings.MaxHorizontalSpeed + _movementStats.MaxSpeedBonus;
         private float EffectiveReduceXonObstacleHit => Mathf.Lerp(_settings.ReduceXonObstacleHit, _settings.MaxReduceXonObstacleHit, _movementStats.ArmorProgress);
+        private float EffectiveDrag => _settings.Drag + _movementStats.WindDrag;
 
         private float GetEffectivePlatformMultiplier(PlatformConfig platformConfig)
         {
@@ -68,6 +70,7 @@ namespace _Project.Scripts.Movement
             VelocityX = 0f;
             VelocityY = 0f;
             _diveEntrySpeed = 0f;
+            PassedDistance = 0f;
             FlightState = FlightState.GLIDE;
             _playerView.transform.position = _initialPlayerPosition;
             _playerSystem.SetPlayerModelRotation(_initialPlayerRotation);
@@ -107,12 +110,13 @@ namespace _Project.Scripts.Movement
             ComputeVerticalVelocity(deltaTime);
             ComputeHorizontalVelocity(deltaTime);
             Move(deltaTime);
+            PassedDistance += VelocityX * deltaTime;
         }
 
         private void Move(float deltaTime)
         {
             // X - Map move
-            foreach (var i in _mapGenerator.ActiveChunks)
+            foreach (var i in _mapGeneratorSystem.ActiveChunks)
             {
                 i.transform.Translate(_movementView.Direction * (VelocityX * deltaTime));
             }
@@ -211,7 +215,7 @@ namespace _Project.Scripts.Movement
                 minSpeed = _settings.MinHorizontalSpeed;
 
                 float lift = VelocityY < 0f ? -VelocityY * _settings.GlideLiftCoefficient : 0f;
-                speedChange = _settings.GlideAcceleration - VelocityX * _settings.Drag + lift;
+                speedChange = _settings.GlideAcceleration - VelocityX * EffectiveDrag + lift;
             }
 
             // Если игрок отскочил от стены и летит назад (VelocityX < 0):
